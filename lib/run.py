@@ -1,20 +1,20 @@
 import cv2
 import numpy as np
-np.random.seed(1337)  # for reproducibility
 from keras.models import load_model
-from scipy import misc
+# from scipy import misc
 from scipy.misc import imresize
 from skimage.transform import resize, rotate
-import glob
 import h5py
 import math
-from datetime import datetime
 import face
 
 IMAGE_SIZE = (128, 128)
 IOD = 40.0
 
 def imgCrop(image, cropBox, boxScale=1):
+    '''
+    Crop an area around the detected face (by OpenCV) in order to feed it into the prediction algorithm (NN).
+    '''
     off = 90    
     y = max(cropBox[1] - 3*off, 0)
     x = max(cropBox[0] - 2*off, 0)
@@ -27,18 +27,15 @@ def imgCrop(image, cropBox, boxScale=1):
     y = max(cropBox[1] - 3*off, y)
     x = max(cropBox[0] - 2*off, x)
 
-
     cropped = image[y:cropBox[1]+cropBox[3]+90, x:cropBox[0]+cropBox[2]+30]
     dims = cropped.shape
-    # print cropped.shape, cropBox
-    # if dims[0] != IMAGE_SIZE[1] or dims[1] != IMAGE_SIZE[0]:
-    #     return imresize(cropped, (IMAGE_SIZE[1], IMAGE_SIZE[0]))
-    # else:
-    #     return cropped
-    #misc.imsave("imgCrop.png", cropped)
+
     return cropped, x, y
 
 def rotateBound(image, angle, center):
+    '''
+    Rotates image. Used for image normalisation, so that the inter-ocular line is always horizontal for the NN.
+    '''
     (cX, cY) = center
     (h, w) = image.shape[:2]
  
@@ -61,28 +58,24 @@ def rotateBound(image, angle, center):
     return cv2.warpAffine(image, M, (nW, nH))
 
 def normaliseImage(image, eyes, xcrop, ycrop):
-    # -- normalize faces using i.o.d
+    '''
+    Normalize faces usinginter-ocular distance i.o.d
+    '''
+    # resite, such that i.o.d is always same
     left_eye = eyes[0] + np.array([xcrop, ycrop, 0, 0])
     right_eye = eyes[1] + np.array([xcrop, ycrop, 0, 0])
-    # print(left_eye, right_eye)
-    # print(image.shape)
-    # left_eye = np.array([celebA['lefteye_y'].iloc[i], celebA['lefteye_x'].iloc[i]])
-    # right_eye = np.array([celebA['righteye_y'].iloc[i], celebA['righteye_x'].iloc[i]])
     scale = IOD / np.linalg.norm(left_eye - right_eye)
     left_eye = scale * left_eye
     right_eye = scale * right_eye
     im = resize(image, (int(scale*image.shape[0]), int(scale*image.shape[1])), mode='edge')
-    # print(im.shape, scale)
-    # print(left_eye, right_eye)
 
+    # rotate to keep inter ocular line horizontal
     diff = np.subtract(left_eye, right_eye)
     angle = math.atan2(diff[0], diff[1])
-    #misc.imsave("previewBEFORErot.png", im)
     im = rotate(im, -angle,center=(left_eye[0],left_eye[1]), preserve_range=True, mode='edge')
 
+    # new resizing for making the image compatible with the trained NN.
     iod = np.linalg.norm(left_eye - right_eye)
-    # print(im.shape, left_eye, right_eye)
-    #misc.imsave("preview.png", im)
     xmin = int(left_eye[0]-1.6*iod)
     xmax = int(left_eye[0]+2*iod)
     ymin = int(left_eye[1]-1.3*iod)
@@ -92,27 +85,16 @@ def normaliseImage(image, eyes, xcrop, ycrop):
     ymin = max(0, ymin)
     ymax = min(im.shape[1], ymax)
     im = im[xmin:xmax, ymin:ymax, :]
-
-    #im = im[ int(left_eye[0]-1.6*iod):int(left_eye[0]+2*iod), int(left_eye[1]-1.3*iod):int(right_eye[1]+1.3*iod),:]
-    # print(im.shape, scale, iod)
-    # print(int(left_eye[1]-1.3*iod),int(right_eye[1]+1.3*iod))
     im = resize(im, IMAGE_SIZE, mode='edge')
-    try:
-        return im
-        # return resize(im, IMAGE_SIZE, mode='edge')
-    except:
-        # plt.imshow(image)
-        # plt.show()
-        print(iod, im.shape)
-        return None
-
+    
+    return im
 
 def detectFace(image):
     # http://docs.opencv.org/trunk/d7/d8b/tutorial_py_face_detection.html
 
-    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
-    eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
-    smile_cascade = cv2.CascadeClassifier('haarcascade_smile.xml')
+    face_cascade = cv2.CascadeClassifier('../face_detection/haarcascade_frontalface_alt.xml')
+    eye_cascade = cv2.CascadeClassifier('../face_detection/haarcascade_eye.xml')
+    smile_cascade = cv2.CascadeClassifier('../face_detection/haarcascade_smile.xml')
 
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -132,32 +114,31 @@ def detectFace(image):
         # croppedImage = imgCrop(image, face, boxScale=1)
         # detect eyes for Inter Oculat Distance
         eyes = eye_cascade.detectMultiScale(roi_gray)
+        if len(eyes) == 2:
+            left_eye = eyes[0][0:2]
+            right_eye = eyes[1][0:2]
+            trackEyes(left_eye, right_eye)
+            # suggestion: skip this frame as prediction, so return None
         for (ex,ey,ew,eh) in eyes:
             cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
             if len(eyes) == 2 and np.abs(eyes[0,1] - eyes[1,1]) < 10:
                 offset1 = np.sqrt((eyes[0,2]**2+eyes[0,3]**2))*0.5
                 offset2 = np.sqrt((eyes[1,2]**2+eyes[1,3]**2))*0.5
                 real_eyes = eyes + np.array([[x+offset1,y+offset1,0,0],[x+offset2,y+offset2,0,0]])
-                #real_eyes = eyes + np.array([[offset1,offset1,0,0],[offset2,offset2,0,0]])
                 real_eyes = np.sort(real_eyes, axis = 0)
                 cropped_image, xcrop, ycrop = imgCrop(unaltered_image, face)
                 normalised_image = normaliseImage(cropped_image, real_eyes, -xcrop, -ycrop)
-       
-
-        
-        # detect eyes
-        # eyes = eye_cascade.detectMultiScale(roi_gray)
-        # for (ex,ey,ew,eh) in eyes:
-        #     cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
-        # # detect smile
-        # smile = smile_cascade.detectMultiScale(roi_gray)
-        # for (sx,sy,sw,sh) in smile:
-        #     cv2.rectangle(roi_color,(sx,sy),(sx+sw,sy+sh),(0,0,255),2)
 
     return normalised_image, image
 
+def trackEyes(left_eye, right_eye):
+	raise NotImplementedError
+
 def mapAttributes(classes):
-    with open('wanted_attributes_normalised.txt', 'r') as f:
+    '''
+    Map the output probabilities to the correpsonding names, like 'smile', etc.
+    '''
+    with open('../face_detection/wanted_attributes_normalised.txt', 'r') as f:
         attributes = f.read()
     attributes = attributes.strip('\n').split(' ')
 
@@ -168,13 +149,15 @@ def mapAttributes(classes):
     return result
 
 if __name__ == "__main__":
-    prediction = {0:'smile', 1:'talk', 2:'clap', 3:'wave'}
+    roboFace = face.Face()
+    roboface.neutral()
     # with h5py.File('trained/trained_webcam.h5',  "a") as f:
     #     try:
     #         del f['/optimizer_weights']
     #     except KeyError:
     #         print('Already deleted optimizer_weights due to incompatibility between keras versions. Nothing to be done here.')
-    model = load_model('trained/pretrained_CelebA_normalised0203-05.h5')
+    # load the trained neural network
+    model = load_model('../face_detection/trained/pretrained_CelebA_normalised0203-05.h5')
 
     cv2.namedWindow("Webcam Preview")
     vc = cv2.VideoCapture(0) # 0 for built-in webcam, 1 for robot
@@ -188,28 +171,30 @@ if __name__ == "__main__":
         # cv2.imwrite('letiN/{}.jpg'.format(datetime.now().strftime('%Y-%m-%d_%H%M%S')), frame)
         normalised_image, frame = detectFace(frame)      
 
-        # TODO cv2 format to normal jpeg like
-
-        # NN stuff
-        # for images from my webcam which have double size
-        # X_test = misc.imresize(frame, (int(0.5*frame.shape[0]),int(0.5*frame.shape[1])))
+        # if a face is detected and the normalisation was successful, predict on it
         if normalised_image is not None:
-            #normalised_image = cv2.cvtColor(normalised_image, cv2.COLOR_BGR2RGB)
             normalised_image = normalised_image[:,:,::-1]
             # subtract mean face
-            meanFace = np.load('mean_face_normalised.npy')
+            meanFace = np.load('../face_detection/mean_face_normalised.npy')
 
-            #misc.imsave("previewRGB.png", normalised_image)
             X_test = np.expand_dims(normalised_image, axis=0)
             X_test -= meanFace
             classes = model.predict_classes(X_test, batch_size=32, verbose=0)
             proba = model.predict_proba(X_test, batch_size=32, verbose=0)
-            predicted_attributes = mapAttributes((proba > 0.2)[0])
+            predicted_attributes = mapAttributes((proba > 0.4)[0])
             print( proba)
             print(predicted_attributes)
         # end NN stuff
 
         # postprocessing and reaction step
+        if 'Smiling' in predicted_attributes:
+            roboFace.happy()
+        if 'Male' in predicted_attributes and 'No_Beard' in predicted_attributes and len(predicted_attributes) == 2:
+            roboFace.unsure()
+
+        roboFace.sad()
+        roboFace.unsure()
+        roboFace.angry()
 
         cv2.imshow("Webcam Preview", frame)
         rval, frame = vc.read()
@@ -218,3 +203,5 @@ if __name__ == "__main__":
             break
     cv2.destroyWindow("Webcam Preview")
 
+  # Black_Hair Blond_Hair Brown_Hair Eyeglasses Gray_Hair Male
+  # Mouth_Slightly_Open No_Beard Smiling Straight_Hair Wavy_Hair Wearing_Earrings Wearing_Lipstick  
