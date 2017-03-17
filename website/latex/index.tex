@@ -28,7 +28,7 @@
 	
 	\begin{tabularx}{\textwidth}{Xl} 
 		Kevin Kiefer      & Letitia Parcalabescu \\ 
-		5. Semester Informatik  & 3. Semester Informatik \\ 
+		5\textsuperscript{th} semester informatics  & 3\textsuperscript{rd} semester informatics \\ 
 	\end{tabularx}
 	
 	Supervisors: Gero Plettenberg and Benjamin Reh
@@ -39,20 +39,28 @@
 	\end{center}
 	
 	\section{Task:}
-	Das vorhandene Robotergesicht, reagiert auf visuelle Reize mit akkustischen und mimischen Signalen. Dafür wurde eine Gesichtserkennung implementiert, dazu eine Sprachausgabe, die eine Reaktion auf das erkannte Gesicht ausdrücken soll. Das erkannte Gesicht wird von dem Roboter auch verfolgt, so dass Augenkontakt besteht.
+	The existing robotic face reacts on visual stimuli by producing acoustic and mimic signals. In order to achieve this, we implemented face and attribute recognition recognition. Furthermore, a voice output should indicate a reaction on the analysed face that RoboFace contemplates. This face is also tracked by the robot in order to maintain eye contact. 
 	
 	\section{Milestones:}
 	\begin{itemize}
-		\item Ende November: Überarbeitung der vorhandenen Codebase.
-		\item Ende November: Gesichtererkennung
-		\item Ende Dezember: Attributserkennung der vom Roboter betrachteten Gesichter
-		\item Ende Dezember: Sprachausgabe
-		\item Anfang Januar: Gesichtstracking
+		\item overwriting the existing codebase
+		\item face recognition
+		\item face attribute recognition
+		\item voice/sound output
+		\item face tracking
 	\end{itemize}
 
 	\section{Setup guide for the robot}
 	\subsection{Hardware}
 	\subsection{Software}
+	For using the face attribute detection software, a standard python (2.7 or 3.5) anaconda installation should additionally include \textit{opencv, keras}. You can easily install them using conda with the following commands:
+	\begin{itemize}
+	\item conda install -c menpo opencv3=3.1.0
+	\item conda install keras
+	\end{itemize}
+	Then, for running the software, execute the python script \texttt{face\_detection/face\_detection.py}
+	
+	If you eventually want to retrain the network for further improvement of the results, then you should take a look in te \texttt{neural\_network\_training/train\_normalised.py} script.
 	\subsection{Funktionsweise der Gesichtserkennung - Die Magie hinter neuronalen Netzen}
 	\subsubsection{Architektur}
 	\begin{enumerate}
@@ -72,15 +80,13 @@
 		\item	Adadelta optimiser
 		\item Overall: 125,709 parameters
 	\end{enumerate}
-	\subsubsection{Trainingsdatensatz}
-	http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html
+	\subsubsection{Training dataset}
+	For training a neural network that generalises as much as possible, we take the big CelebA dataset, which is freely available at http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html . It contains 202.599 images of 10.177 celebrities annotated with 40 attributes per image.
+
+	\includegraphics[width=0.5\linewidth]{images/CelebA} \\
+	\includegraphics[width=0.5\linewidth]{images/CelebAExamples}
 	
-	202.599 Bilder, 10.177 Identitäten, 40 Attribute pro Bild
-	
-	\includegraphics[width=0.88\linewidth]{images/CelebA} \\
-	\includegraphics[width=0.88\linewidth]{images/CelebAExamples}
-	
-	Wähle 13 Attribute aus den 40 die zur Verfügung stehen.
+	From this attributes, we take 13 that are based only of the face region (so not taking the neck, shoulders or head top into account) and those where we think RoboFace could make something of. These are:
 		\begin{enumerate}
 			\item Black Hair
 			\item Blond Hair
@@ -96,15 +102,45 @@
 			\item Wearing Earrings
 			\item Wearing Lipstick
 		\end{enumerate}
-	\subsubsection{Normalisierung der Daten}
-	NOT! Obwohl hier die Trainingkurven sehr gut aussehen, täuschen diese auf dem ersten Blick. Wenn man das generalisrieungsvermögen des Netzes untersucht, stellt man fest, dass die \\
+	\subsubsection{Training the neural network}
+	For training the neural network, we make use of the parallelizing capacity of the GPU, which results into a training time of 2 seconds per 1024 images. CPU training is obviously much slower.
+	The optimiser for finding a good local optimum of the loss function is the Adadelta optimiser from keras, which stands out for his adaptive learning rate and faster convergence than normal stochastic gradient descent SGD. The overall 125.709 parameters are found in this way.
+	\subsubsection{Normalising the data}
+	A wrong way to train the neural network is to feed in the CelebA images from the dataset exactly as they are. Even though the training curve looks very fine, since we achieve a low loss value and a high accuracy on the training set and on the test set, the neural network overfits the CelebA dataset and does not generalise at all on real world images as taken from RoboFace. He completely fails by saying that in the following image, there is a male with no beard with probabilities around 90\%
 	\includegraphics[width=\linewidth]{images/lossBad}\\
-	\includegraphics[width=0.88\linewidth]{images/meanFace}\\
+	\includegraphics[width=0.2\linewidth]{images/failMaleNoBeard}\\
+	
+	The write way too do it, is by normalising the training and the test set, as well as the images taken by RoboFace. This is done in \texttt{neural\_network\_training/normalisation.py} the following steps:
+	\begin{enumerate}
+	\item center the eyes
+	\item resize images to have the same inter ocular distance
+	\item rotate image to make the inter ocular line look horizontal
+	\item resize image to 128 x 128 pixels
+	\item subtract the mean face
+	\end{enumerate}
+
+	\includegraphics[width=0.5\linewidth]{images/meanFace}\\
+	Now, the loss-accuracy curve looks as well as before, but the generalisation capabilities are vastly enhanced.
+	
 	\includegraphics[width=\linewidth]{images/lossGood}\\
-	\includegraphics[width=0.88\linewidth]{images/accuracy_on_classes}
-	\section{Ausblick}
+	\includegraphics[width=0.8\linewidth]{images/accuracy_on_classes}
+	'Black Hair', 'Mouth Slightly Open', 'No Beard', 'Smiling', 'Wearing Earrings', 'Wearing Lipstick' \\
+	\includegraphics[height=0.1\textheight]{images/leti_normalised110} \\ 
+	'Black Hair', 'Mouth Slightly Open', 'No Beard', 'Straight Hair', 'Wearing Lipstick' \\
+	\includegraphics[height=0.1\textheight]{images/leti_normalised111} 
+	
+	On another day, when having another look, he also performs fine:
+	
+	'Black Hair', 'Mouth Slightly Open', 'No Beard', 'Smiling', 'Straight Hair', 'Wearing Earrings', \textcolor{red}{'Wearing Lipstick}
+	 \\
+	\includegraphics[height=0.1\textheight]{images/leti_normalised24}\\
+	
+	Indeed, the following errors are done in 2 out of 45 examples. But this small amount is no problem, since we have a continuous frame and prediction stream from the robot. If for example, he predicts the stream 'male, male, female, male, male', it is clear that we can exclude this error in a post-processing step.
+	'Black Hair', \textcolor{red}{'Male'}, 'Straight Hair'\\
+	\includegraphics[height=0.2\textheight]{images/leti_normalised0}
+	\section{Outlook}
 	Verbeserung der Hardware
-	\section{Quellcode}
-	github Link
+	\section{Source code}
+	Can be found on	https://github.com/LetiP/RoboFace
 	
 \end{document} 

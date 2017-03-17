@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.11.25)  17 MAR 2017 12:56
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.11.25)  17 MAR 2017 13:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -485,85 +485,180 @@ File: images/faceEdited.jpg Graphic file (type jpg)
 <use images/faceEdited.jpg>
 Package pdftex.def Info: images/faceEdited.jpg used on input line 38.
 (pdftex.def)             Requested size: 368.06693pt x 181.92612pt.
-
-(/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-0.def
-File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
-) [1
+ [1
 
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./images/roboFace.jpg> <./
 images/faceEdited.jpg>]
 LaTeX Font Info:    Try loading font information for OMS+lmr on input line 46.
- (/usr/share/texmf/tex/latex/lm/omslmr.fd
+
+(/usr/share/texmf/tex/latex/lm/omslmr.fd
 File: omslmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Font shape `OMS/lmr/m/n' in size <10.95> not available
 (Font)              Font shape `OMS/lmsy/m/n' tried instead on input line 46.
- [2]
-<images/CelebA.png, id=14, 1443.3925pt x 1051.93pt>
-File: images/CelebA.png Graphic file (type png)
- <use images/CelebA.png>
-Package pdftex.def Info: images/CelebA.png used on input line 80.
-(pdftex.def)             Requested size: 368.06693pt x 268.23058pt.
+LaTeX Font Info:    Try loading font information for T1+lmtt on input line 61.
 
-<images/CelebAExamples.png, id=15, 1105.12875pt x 818.05624pt>
+(/usr/share/texmf/tex/latex/lm/t1lmtt.fd
+File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+Package microtype Info: Loading generic settings for font family
+(microtype)             `lmtt' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+
+Overfull \hbox (29.37477pt too wide) in paragraph at lines 61--62
+\T1/lmr/m/n/10.95 (-20) Then, for run-ning the soft-ware, ex-e-cute the python 
+script \T1/lmtt/m/n/10.95 face_detection/face_detection.py 
+ []
+
+[2] <images/CelebA.png, id=17, 1443.3925pt x 1051.93pt>
+File: images/CelebA.png Graphic file (type png)
+
+<use images/CelebA.png>
+Package pdftex.def Info: images/CelebA.png used on input line 86.
+(pdftex.def)             Requested size: 209.12778pt x 152.40555pt.
+
+<images/CelebAExamples.png, id=18, 1105.12875pt x 818.05624pt>
 File: images/CelebAExamples.png Graphic file (type png)
 
 <use images/CelebAExamples.png>
-Package pdftex.def Info: images/CelebAExamples.png used on input line 81.
-(pdftex.def)             Requested size: 368.06693pt x 272.4559pt.
- [3 <./images/CelebA.png>]
-<images/lossBad.pdf, id=19, 1300.86pt x 433.62pt>
+Package pdftex.def Info: images/CelebAExamples.png used on input line 87.
+(pdftex.def)             Requested size: 209.12778pt x 154.79568pt.
+ [3] [4 <./images/CelebA.png> <./images/CelebAExamples.png>] <images/lossBad.pd
+f, id=25, 1300.86pt x 433.62pt>
 File: images/lossBad.pdf Graphic file (type pdf)
- <use images/lossBad.pdf>
-Package pdftex.def Info: images/lossBad.pdf used on input line 101.
+
+<use images/lossBad.pdf>
+Package pdftex.def Info: images/lossBad.pdf used on input line 110.
 (pdftex.def)             Requested size: 418.25555pt x 139.41626pt.
 
-<images/meanFace.pdf, id=20, 578.16pt x 433.62pt>
+<images/failMaleNoBeard.pdf, id=26, 297.64983pt x 345.05959pt>
+File: images/failMaleNoBeard.pdf Graphic file (type pdf)
+
+<use images/failMaleNoBeard.pdf>
+Package pdftex.def Info: images/failMaleNoBeard.pdf used on input line 111.
+(pdftex.def)             Requested size: 83.64983pt x 96.96878pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 109--112
+
+ []
+
+[5 <./images/lossBad.pdf> <./images/failMaleNoBeard.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./images/failMaleNoBeard.pdf): PDF incl
+usion: multiple pdfs with page group included in a single page
+>] <images/meanFace.pdf, id=364, 578.16pt x 433.62pt>
 File: images/meanFace.pdf Graphic file (type pdf)
- <use images/meanFace.pdf>
-Package pdftex.def Info: images/meanFace.pdf used on input line 102.
-(pdftex.def)             Requested size: 368.06693pt x 276.04698pt.
 
-<images/lossGood.pdf, id=21, 1300.86pt x 433.62pt>
+<use images/meanFace.pdf>
+Package pdftex.def Info: images/meanFace.pdf used on input line 122.
+(pdftex.def)             Requested size: 209.12778pt x 156.84413pt.
+ <images/lossGood.pdf, id=365, 1300.86pt x 433.62pt>
 File: images/lossGood.pdf Graphic file (type pdf)
- <use images/lossGood.pdf>
-Package pdftex.def Info: images/lossGood.pdf used on input line 103.
+
+<use images/lossGood.pdf>
+Package pdftex.def Info: images/lossGood.pdf used on input line 125.
 (pdftex.def)             Requested size: 418.25555pt x 139.41626pt.
 
-<images/accuracy_on_classes.pdf, id=22, 1336.995pt x 758.835pt>
+<images/accuracy_on_classes.pdf, id=366, 1336.995pt x 758.835pt>
 File: images/accuracy_on_classes.pdf Graphic file (type pdf)
 
 <use images/accuracy_on_classes.pdf>
-Package pdftex.def Info: images/accuracy_on_classes.pdf used on input line 104.
+Package pdftex.def Info: images/accuracy_on_classes.pdf used on input line 126.
 
-(pdftex.def)             Requested size: 368.06693pt x 208.90605pt.
- [4 <./images/CelebAExamples.png>] [5 <./images/lossBad.pdf> <./images/meanFace
-.pdf
+(pdftex.def)             Requested size: 334.60571pt x 189.90512pt.
 
-pdfTeX warning: /usr/bin/pdflatex (file ./images/meanFace.pdf): PDF inclusion: 
+<images/leti_normalised110.jpeg, id=367, 128.48pt x 128.48pt>
+File: images/leti_normalised110.jpeg Graphic file (type jpg)
+
+<use images/leti_normalised110.jpeg>
+Package pdftex.def Info: images/leti_normalised110.jpeg used on input line 128.
+
+(pdftex.def)             Requested size: 59.58377pt x 59.58365pt.
+
+<images/leti_normalised111.jpeg, id=368, 128.48pt x 128.48pt>
+File: images/leti_normalised111.jpeg Graphic file (type jpg)
+
+<use images/leti_normalised111.jpeg>
+Package pdftex.def Info: images/leti_normalised111.jpeg used on input line 130.
+
+(pdftex.def)             Requested size: 59.58377pt x 59.58365pt.
+
+Overfull \hbox (10.95pt too wide) in paragraph at lines 125--131
+[][] 
+ []
+
+
+Overfull \hbox (13.78937pt too wide) in paragraph at lines 125--131
+[] \T1/lmr/m/n/10.95 (-20) 'Black Hair', 'Mouth
+ []
+
+[6 <./images/meanFace.pdf> <./images/lossGood.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./images/lossGood.pdf): PDF inclusion: 
 multiple pdfs with page group included in a single page
->] [6 <./images/lossGood.pdf> <./images/accuracy_on_classes.pdf
+> <./images/accuracy_on_classes.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./images/accuracy_on_classes.pdf): PDF 
 inclusion: multiple pdfs with page group included in a single page
->] (./index.aux) ) 
+>]
+! Undefined control sequence.
+l.134 ...ght Hair', 'Wearing Earrings', \textcolor
+                                                  {red}{'Wearing Lipstick}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+<images/leti_normalised24.jpeg, id=723, 128.48pt x 128.48pt>
+File: images/leti_normalised24.jpeg Graphic file (type jpg)
+
+<use images/leti_normalised24.jpeg>
+Package pdftex.def Info: images/leti_normalised24.jpeg used on input line 136.
+(pdftex.def)             Requested size: 59.58377pt x 59.58365pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 134--137
+
+ []
+
+! Undefined control sequence.
+l.139 	'Black Hair', \textcolor
+                               {red}{'Male'}, 'Straight Hair'\\
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+<images/leti_normalised0.jpeg, id=724, 128.48pt x 128.48pt>
+File: images/leti_normalised0.jpeg Graphic file (type jpg)
+
+<use images/leti_normalised0.jpeg>
+Package pdftex.def Info: images/leti_normalised0.jpeg used on input line 140.
+(pdftex.def)             Requested size: 119.15971pt x 119.15823pt.
+ [7 <./images/leti_normalised110.jpeg> <./images/leti_normalised111.jpeg> <./im
+ages/leti_normalised24.jpeg> <./images/leti_normalised0.jpeg>] (./index.aux) ) 
 Here is how much of TeX's memory you used:
- 6923 strings out of 494374
- 108471 string characters out of 6164953
+ 6523 strings out of 494374
+ 105089 string characters out of 6164953
  257634 words of memory out of 5000000
- 10056 multiletter control sequences out of 15000+600000
- 50950 words of font info for 73 fonts, out of 8000000 for 9000
+ 9629 multiletter control sequences out of 15000+600000
+ 59329 words of font info for 84 fonts, out of 8000000 for 9000
  350 hyphenation exceptions out of 8191
- 46i,8n,46p,443b,480s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/shar
-e/texmf/fonts/enc/dvips/lm/lm-ec.enc}</usr/share/texmf/fonts/type1/public/lm/lm
-r10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/
-fonts/type1/public/lm/lmsy10.pfb>
-Output written on index.pdf (6 pages, 9949190 bytes).
+ 46i,12n,46p,508b,261s stack positions out of 5000i,500n,10000p,200000b,80000s
+{
+/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dvips
+/lm/lm-mathsy.enc}</usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share
+/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/l
+mri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texm
+f/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt
+10.pfb>
+Output written on index.pdf (7 pages, 10665016 bytes).
 PDF statistics:
- 718 PDF objects out of 1000 (max. 8388607)
- 444 compressed objects within 5 object streams
+ 752 PDF objects out of 1000 (max. 8388607)
+ 465 compressed objects within 5 object streams
  0 named destinations out of 1000 (max. 500000)
- 12841 words of extra memory for PDF output out of 14400 (max. 10000000)
+ 15938 words of extra memory for PDF output out of 17280 (max. 10000000)
 
