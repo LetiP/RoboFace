@@ -61,8 +61,8 @@
 	Then, for running the software, execute the python script \texttt{face\_detection/face\_detection.py}
 	
 	If you eventually want to retrain the network for further improvement of the results, then you should take a look in te \texttt{neural\_network\_training/train\_normalised.py} script.
-	\subsection{Funktionsweise der Gesichtserkennung - Die Magie hinter neuronalen Netzen}
-	\subsubsection{Architektur}
+	\subsection{Face attribute detection - the magic behind neural networks}
+	\subsubsection{Architecture}
 	\begin{enumerate}
 		\item 	32 of neurons in each convolutional layer
 		\item Activations: Relu
@@ -124,6 +124,7 @@
 	
 	\includegraphics[width=\linewidth]{images/lossGood}\\
 	\includegraphics[width=0.8\linewidth]{images/accuracy_on_classes}
+	
 	'Black Hair', 'Mouth Slightly Open', 'No Beard', 'Smiling', 'Wearing Earrings', 'Wearing Lipstick' \\
 	\includegraphics[height=0.1\textheight]{images/leti_normalised110} \\ 
 	'Black Hair', 'Mouth Slightly Open', 'No Beard', 'Straight Hair', 'Wearing Lipstick' \\
@@ -131,12 +132,13 @@
 	
 	On another day, when having another look, he also performs fine:
 	
-	'Black Hair', 'Mouth Slightly Open', 'No Beard', 'Smiling', 'Straight Hair', 'Wearing Earrings', \textcolor{red}{'Wearing Lipstick}
+	'Black Hair', 'Mouth Slightly Open', 'No Beard', 'Smiling', 'Straight Hair', 'Wearing Earrings', \emph{'Wearing Lipstick}
 	 \\
 	\includegraphics[height=0.1\textheight]{images/leti_normalised24}\\
 	
 	Indeed, the following errors are done in 2 out of 45 examples. But this small amount is no problem, since we have a continuous frame and prediction stream from the robot. If for example, he predicts the stream 'male, male, female, male, male', it is clear that we can exclude this error in a post-processing step.
-	'Black Hair', \textcolor{red}{'Male'}, 'Straight Hair'\\
+	
+	'Black Hair', \emph{'Male'}, 'Straight Hair'\\
 	\includegraphics[height=0.2\textheight]{images/leti_normalised0}
 	\section{Outlook}
 	Hardware improvements

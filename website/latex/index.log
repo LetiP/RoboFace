@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.11.25)  17 MAR 2017 13:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.11.25)  17 MAR 2017 13:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -569,11 +569,15 @@ Package pdftex.def Info: images/accuracy_on_classes.pdf used on input line 126.
 
 (pdftex.def)             Requested size: 334.60571pt x 189.90512pt.
 
+Overfull \hbox (10.95pt too wide) in paragraph at lines 125--127
+[][] 
+ []
+
 <images/leti_normalised110.jpeg, id=367, 128.48pt x 128.48pt>
 File: images/leti_normalised110.jpeg Graphic file (type jpg)
 
 <use images/leti_normalised110.jpeg>
-Package pdftex.def Info: images/leti_normalised110.jpeg used on input line 128.
+Package pdftex.def Info: images/leti_normalised110.jpeg used on input line 129.
 
 (pdftex.def)             Requested size: 59.58377pt x 59.58365pt.
 
@@ -581,20 +585,10 @@ Package pdftex.def Info: images/leti_normalised110.jpeg used on input line 128.
 File: images/leti_normalised111.jpeg Graphic file (type jpg)
 
 <use images/leti_normalised111.jpeg>
-Package pdftex.def Info: images/leti_normalised111.jpeg used on input line 130.
+Package pdftex.def Info: images/leti_normalised111.jpeg used on input line 131.
 
 (pdftex.def)             Requested size: 59.58377pt x 59.58365pt.
-
-Overfull \hbox (10.95pt too wide) in paragraph at lines 125--131
-[][] 
- []
-
-
-Overfull \hbox (13.78937pt too wide) in paragraph at lines 125--131
-[] \T1/lmr/m/n/10.95 (-20) 'Black Hair', 'Mouth
- []
-
-[6 <./images/meanFace.pdf> <./images/lossGood.pdf
+ [6 <./images/meanFace.pdf> <./images/lossGood.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./images/lossGood.pdf): PDF inclusion: 
 multiple pdfs with page group included in a single page
@@ -602,52 +596,33 @@ multiple pdfs with page group included in a single page
 
 pdfTeX warning: /usr/bin/pdflatex (file ./images/accuracy_on_classes.pdf): PDF 
 inclusion: multiple pdfs with page group included in a single page
->]
-! Undefined control sequence.
-l.134 ...ght Hair', 'Wearing Earrings', \textcolor
-                                                  {red}{'Wearing Lipstick}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-<images/leti_normalised24.jpeg, id=723, 128.48pt x 128.48pt>
+>] <images/leti_normalised24.jpeg, id=723, 128.48pt x 128.48pt>
 File: images/leti_normalised24.jpeg Graphic file (type jpg)
 
 <use images/leti_normalised24.jpeg>
-Package pdftex.def Info: images/leti_normalised24.jpeg used on input line 136.
+Package pdftex.def Info: images/leti_normalised24.jpeg used on input line 137.
 (pdftex.def)             Requested size: 59.58377pt x 59.58365pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 134--137
+Underfull \hbox (badness 10000) in paragraph at lines 135--138
 
  []
-
-! Undefined control sequence.
-l.139 	'Black Hair', \textcolor
-                               {red}{'Male'}, 'Straight Hair'\\
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
 
 <images/leti_normalised0.jpeg, id=724, 128.48pt x 128.48pt>
 File: images/leti_normalised0.jpeg Graphic file (type jpg)
 
 <use images/leti_normalised0.jpeg>
-Package pdftex.def Info: images/leti_normalised0.jpeg used on input line 140.
+Package pdftex.def Info: images/leti_normalised0.jpeg used on input line 142.
 (pdftex.def)             Requested size: 119.15971pt x 119.15823pt.
  [7 <./images/leti_normalised110.jpeg> <./images/leti_normalised111.jpeg> <./im
 ages/leti_normalised24.jpeg> <./images/leti_normalised0.jpeg>] (./index.aux) ) 
 Here is how much of TeX's memory you used:
- 6523 strings out of 494374
- 105089 string characters out of 6164953
+ 6525 strings out of 494374
+ 105111 string characters out of 6164953
  257634 words of memory out of 5000000
  9629 multiletter control sequences out of 15000+600000
- 59329 words of font info for 84 fonts, out of 8000000 for 9000
+ 59412 words of font info for 85 fonts, out of 8000000 for 9000
  350 hyphenation exceptions out of 8191
- 46i,12n,46p,508b,261s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 46i,12n,46p,509b,261s stack positions out of 5000i,500n,10000p,200000b,80000s
 {
 /usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dvips
 /lm/lm-mathsy.enc}</usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share
@@ -655,7 +630,7 @@ Here is how much of TeX's memory you used:
 mri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texm
 f/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt
 10.pfb>
-Output written on index.pdf (7 pages, 10665016 bytes).
+Output written on index.pdf (7 pages, 10668860 bytes).
 PDF statistics:
  752 PDF objects out of 1000 (max. 8388607)
  465 compressed objects within 5 object streams
