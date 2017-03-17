@@ -1,0 +1,218 @@
+\documentclass{beamer}
+\usetheme{Frankfurt}
+\usecolortheme{seahorse} %dove
+\usepackage{remreset}
+\makeatletter
+\@removefromreset{subsection}{section}
+\makeatother
+\setcounter{subsection}{1}
+
+%%aici poate nu am nevoie de tot
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[utf8x]{inputenc}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[font={footnotesize}]{caption}
+\usepackage{setspace}
+\usepackage{float}
+%\usepackage[hidelinks]{hyperref}
+\usepackage{wrapfig}
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+\setbeamertemplate{caption}[numbered]
+\usepackage[authoryear, round]{natbib}
+\bibliographystyle{abbrvnat}
+\renewcommand{\bibsection}{\subsubsection*{\bibname } }
+%aici poate nu am nevoie de tot
+\usepackage{soul}
+\usepackage{animate}
+\usepackage{multicol}
+
+\setbeamertemplate{footline}[frame number]
+
+\title[Deep Vision] %optional
+{\textbf{Through the eyes of RoboFace}}
+ 
+\subtitle{Deep Vision -- final project}
+ 
+\author{Letiția Elena Pârcălăbescu}
+ 
+\date{8\textsuperscript{th} of February 2017}
+
+\begin{document}
+\frame{\titlepage}
+
+%\begin{frame}
+%\frametitle{Structure}
+%\tableofcontents
+%\end{frame}
+
+\section{Problem}
+\begin{frame}{RoboFace}{Problem description}
+	\begin{figure}
+		\centering
+		\vspace*{-18mm}
+		\includegraphics[width=0.8\linewidth,angle=270]{figures/roboFace}
+		\label{fig:face}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{RoboFace}{Problem description}
+		\vspace*{-11.6mm}
+		\hspace*{2.85cm}
+		\includegraphics[width=0.61\linewidth]{figures/webcam}
+\end{frame}
+
+\section{Dataset}
+\begin{frame}{CelebA Dataset \cite{website}}
+\centering
+	202.599 images,
+	10.177 identities,
+	40 attributes per image 
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.9\linewidth]{figures/CelebA}
+		\label{fig:celebA}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{CelebA Dataset}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.9\linewidth]{figures/CelebAExamples}
+		\label{fig:celebAExamples}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{CelebA dataset}{Attribute selection}
+	chose 13 labels out of 40 available
+	\begin{multicols}{2}
+	\begin{enumerate}
+	\item Black Hair
+	\item Blond Hair
+	\item Brown Hair
+	\item Eyeglasses
+	\item Gray Hair
+	\item Male
+	\item Mouth Slightly Open
+	\item No Beard
+	\item Smiling
+	\item Straight Hair
+	\item Wavy Hair
+	\item Wearing Earrings
+	\item Wearing Lipstick
+	\end{enumerate}
+	\end{multicols}
+\end{frame}
+
+\section{Paper}
+% http://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Liu_Deep_Learning_Face_ICCV_2015_paper.pdf
+\begin{frame}{Deep Learning Face Attributes in the Wild}{\cite{liu2015faceattributes}}
+	\centering
+	Joint face localisation and attribute prediction using only image-level attribute tags.
+	\begin{figure}
+			\centering
+			\includegraphics[width=\linewidth]{figures/paperArchitecture}
+			\label{fig:paperarchi}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Deep Learning Face Attributes in the Wild}{\cite{liu2015faceattributes}}
+	\centering
+	Response map of the LNet (on attributes).
+	\begin{figure}
+			\centering
+			\includegraphics[width=\linewidth]{figures/response}
+			\label{fig:response}
+	\end{figure}
+\end{frame}
+
+\section{Own Approach}
+\begin{frame}{Own Approach}{Architecture}
+	\begin{enumerate}
+			\item 	32 of neurons in each convolutional layer
+			\item Activations: Relu
+			\item 9 x 9 convolution $\rightarrow$ Max Pooling
+			\item	7 x 7 convolution $\rightarrow$  Max Pooling
+			\item	5 x 5 convolution $\rightarrow$  Max Pooling
+			\item	3 x 3 convolution $\rightarrow$  Max Pooling
+			\item	3 x 3 convolution $\rightarrow$  Max Pooling
+			\item	Dropout(0.25)
+			\item	512 Dense
+			\item	Dropout(0.5)
+			\item	13 Dense
+			\item	Sigmoid
+			\item	Binary Crossentropy
+			\item	Adadelta optimiser
+			\item Overall: 125,709 parameters
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Own Approach}{How to not do it!}
+Without data normalisation: beautiful training curve, BUT...
+\hspace*{-2.4cm}
+	\includegraphics[height=0.6\textheight]{figures/lossBad} 
+\end{frame}
+
+\begin{frame}{Own Approach}{How to not do it!}
+... BUT no generalisation capability at all! \\
+The predicted classes on the real world images from the robot are: \\
+\centering
+Male (0.89), No beard (0.76) \\
+\includegraphics[height=0.6\textheight]{figures/failMaleNoBeard} 
+\end{frame}
+
+\begin{frame}{Data normalisation}{How to really do it!}
+\begin{enumerate}
+\item center the eyes
+\item resize images to have the same inter ocular distance
+\item rotate image to make the inter ocular line look horizontal
+\item resize image to 128 x 128 pixels
+\item subtract the mean face
+\end{enumerate}
+\centering
+	\includegraphics[height=0.6\textheight]{figures/meanFace} 
+\end{frame}
+
+\begin{frame}{Own Approach}{Training curves}
+\hspace*{-2.4cm}
+	\includegraphics[height=0.6\textheight]{figures/lossGood} 
+\end{frame}
+
+\begin{frame}{Own Approach}{Final accuracy per class}
+\centering
+overall accuracy of 90\%
+	\includegraphics[width=1.1\textwidth]{figures/accuracy_on_classes} 
+\end{frame}
+
+\begin{frame}{Exemplary results}
+\centering
+'Black Hair', 'Mouth Slightly Open', 'No Beard', 'Smiling', 'Wearing Earrings', 'Wearing Lipstick' \\
+\includegraphics[height=0.3\textheight]{figures/leti_normalised110} \\ 
+'Black Hair', 'Mouth Slightly Open', 'No Beard', 'Straight Hair', 'Wearing Lipstick' \\
+\includegraphics[height=0.3\textheight]{figures/leti_normalised111} 
+\end{frame}
+
+\begin{frame}{Exemplary results}
+'Black Hair', 'Mouth Slightly Open', 'No Beard', 'Smiling', 'Straight Hair', 'Wearing Earrings', \textcolor{red}{'Wearing Lipstick}
+ \\
+ \centering
+\includegraphics[height=0.3\textheight]{figures/leti_normalised24}\\
+'Black Hair', \textcolor{red}{'Male'}, 'Straight Hair' -- only 2 out of 45 examples. \\
+\includegraphics[height=0.3\textheight]{figures/leti_normalised0}
+\end{frame}
+
+
+
+\section{References}
+\begin{frame}
+	\frametitle{References}
+	\footnotesize
+	\bibliography{mybib.bib}
+\end{frame}
+
+\end{document}
