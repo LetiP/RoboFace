@@ -53,7 +53,7 @@
 	\section{Setup guide for the robot}
 	\subsection{Hardware}
 	\subsection{Software}
-	The elaborated C++ code for controlling RoboFace has beautiful user frienly python binaries. The following code example speaks for himself:
+	The elaborated C++ code for controlling RoboFace has beautiful user frienly python binaries. The following code example speaks for himself: \\
 	>>> import face \\
 	>>> f = face.Face()\\
 	>>> f.sad()\\
@@ -71,8 +71,29 @@
 	Then, for running the software, execute the python script \texttt{face\_detection/face\_detection.py}
 	
 	If you eventually want to retrain the network for further improvement of the results, then you should take a look in te \texttt{neural\_network\_training/train\_normalised.py} script.
-	\subsection{Face attribute detection - the magic behind neural networks}
+	\subsection{Face attribute detection - The magic behind neural networks}
+	The task to give RoboFace his understanding of the world through the webcam he uses to perceive, belongs to the problems that computer vision tries to solve. The algorithm of our choice is a convolutional neural network (CNN), since neural networks are the state of the art today in computer vision.
+	
+	A neural network is composed of linear functions called neurons, followed by a nonlinear transformation. We can not only have many neurons per layer, but also stack layers consecutively. This results in a much better and faster training, since the minimum of the non-convex function we want to minimise in training is a better one , so closer to the global optimum we can not find. But interesting is, that it was mathematically proven, that a single hidden layer (so a neural network containing input, output and one middle layer) of finite number of neurons, is enough for approximating any continous function. For more details, see the universal approximation theorem.
+	
+	% image of one hidden layer, more, one neuron
+	
+	The architecture says how this neurons are stacked in layers. A widely used layer in vision solving algorithms is one implementing convolutions. This is inspired by the human vision system, that also bundles a region of photosensitive cells and combine their signal into one neuron that send his own output to be processed further.
+	
 	\subsubsection{Architecture}
+	We take more of this convolutional layers and stack them together, to generate a so called deep neural network. The deepness shows its effectiveness in maximising the field of view of the network. Since a single convolution has for example the size 9 x 9, one layer can see only this much context. But stacking a next convolutional layer, the output of the previous 9 x 9 is considered again in 7 x 7 window for example, grows the field of view of the second layer considerably.
+	
+	In the architecture we implemented, there is a Max Pooling Layer following every convolution step. This layer is actually downscaling the image to the half, in order to reduce the number of parameters and avoid redundancy of information.
+	
+	The activations representing the nonlinearity is the ReLU (rectified linear unit) which penalises for wrong answers of each neuron during training.
+	% image of a ReLU
+	
+	The dropout layers in our architecture shut down randomly 25\% and 50\% of the neurons in order to make a better generalising neural network, since the neurons do not get the chance to learn the data by heart and over-fit.
+	
+	The dense layer is connecting every neuron in the previous one with the ones in the current layer. Hence it contains more parameters than the convolutional ones, where the weights are vastly shared. We can interpret the role of the dense layers as the classification step in the network, whereas the convolutions did the feature extraction. So it is sensible to choose the number of neurons in the last layer as the amount of classes we want to predict, which is 13 in our case.
+	
+	The last activation function in the network penalises for wrong classification. We use the binary crossentropy and not the categorical one, since the classes are not mutually dependent. We can have a male with straight hair, this attributes do not exclude each other. There are some which do, like straight and wavy hair, but firstly, a good trained network should not predict both at the same time, since it learned to distinguish one from another. Secondly, this can be avoided in a postprocessing step, at prediction time.
+	
 	\begin{enumerate}
 		\item 	32 of neurons in each convolutional layer
 		\item Activations: Relu
@@ -90,6 +111,8 @@
 		\item	Adadelta optimiser
 		\item Overall: 125,709 parameters
 	\end{enumerate}
+	% architecrure figure
+
 	\subsubsection{Training dataset}
 	For training a neural network that generalises as much as possible, we take the big CelebA dataset, which is freely available at http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html . It contains 202.599 images of 10.177 celebrities annotated with 40 attributes per image.
 
@@ -113,14 +136,14 @@
 			\item Wearing Lipstick
 		\end{enumerate}
 	\subsubsection{Training the neural network}
-	For training the neural network, we make use of the parallelizing capacity of the GPU, which results into a training time of 2 seconds per 1024 images. CPU training is obviously much slower.
+	The neural network implementation is done with the keras module using the TensorFlow backend. For training the neural network, we make use of the parallelizing capacity of the GPU, which results into a training time of 2 seconds per 1024 images. CPU training is obviously much slower.
 	The optimiser for finding a good local optimum of the loss function is the Adadelta optimiser from keras, which stands out for his adaptive learning rate and faster convergence than normal stochastic gradient descent SGD. The overall 125.709 parameters are found in this way.
 	\subsubsection{Normalising the data}
 	A wrong way to train the neural network is to feed in the CelebA images from the dataset exactly as they are. Even though the training curve looks very fine, since we achieve a low loss value and a high accuracy on the training set and on the test set, the neural network over-fits the CelebA dataset and does not generalise at all on real world images as taken from RoboFace. He completely fails by saying that in the following image, there is a male with no beard with probabilities around 90\%
 	\includegraphics[width=\linewidth]{images/lossBad}\\
 	\includegraphics[width=0.2\linewidth]{images/failMaleNoBeard}\\
 	
-	The write way too do it, is by normalising the training and the test set, as well as the images taken by RoboFace. This is done in \texttt{neural\_network\_training/normalisation.py} the following steps:
+	The write way to do it, is by normalising the training and the test set, as well as the images taken by RoboFace. This is done in \texttt{neural\_network\_training/normalisation.py} the following steps:
 	\begin{enumerate}
 	\item center the eyes
 	\item resize images to have the same inter ocular distance
@@ -134,6 +157,11 @@
 	
 	\includegraphics[width=\linewidth]{images/lossGood}\\
 	\includegraphics[width=0.8\linewidth]{images/accuracy_on_classes}
+	
+	In the plot showing the accuracy per each class, we see as expected, that wavy and straight hair are comparably not distinguished that well. This comes form the fact, that the normalisation step crops out most of the region that does not contain the face, so a lot of hair information gets lost. The eyeglasses class, which is in the center of the face image, gets the best accuracy.
+	
+	\subsubsection{Results}
+	In the following are some examples of the neural network predicting on images taken by RoboFace.
 	
 	'Black Hair', 'Mouth Slightly Open', 'No Beard', 'Smiling', 'Wearing Earrings', 'Wearing Lipstick' \\
 	\includegraphics[height=0.1\textheight]{images/leti_normalised110} \\ 
@@ -149,9 +177,9 @@
 	Indeed, the following errors are done in 2 out of 45 examples. But this small amount is no problem, since we have a continuous frame and prediction stream from the robot. If for example, he predicts the stream 'male, male, female, male, male', it is clear that we can exclude this error in a post-processing step.
 	
 	'Black Hair', \emph{'Male'}, 'Straight Hair'\\
-	\includegraphics[height=0.2\textheight]{images/leti_normalised0}
+	\includegraphics[height=0.1\textheight]{images/leti_normalised0}
 	\section{Outlook}
-	Hardware improvements
+	Hardware improvements...
 	\section{Source code}
 	Can be found on	https://github.com/LetiP/RoboFace
 	
