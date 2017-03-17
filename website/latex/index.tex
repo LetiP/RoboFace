@@ -106,7 +106,7 @@
 	For training the neural network, we make use of the parallelizing capacity of the GPU, which results into a training time of 2 seconds per 1024 images. CPU training is obviously much slower.
 	The optimiser for finding a good local optimum of the loss function is the Adadelta optimiser from keras, which stands out for his adaptive learning rate and faster convergence than normal stochastic gradient descent SGD. The overall 125.709 parameters are found in this way.
 	\subsubsection{Normalising the data}
-	A wrong way to train the neural network is to feed in the CelebA images from the dataset exactly as they are. Even though the training curve looks very fine, since we achieve a low loss value and a high accuracy on the training set and on the test set, the neural network overfits the CelebA dataset and does not generalise at all on real world images as taken from RoboFace. He completely fails by saying that in the following image, there is a male with no beard with probabilities around 90\%
+	A wrong way to train the neural network is to feed in the CelebA images from the dataset exactly as they are. Even though the training curve looks very fine, since we achieve a low loss value and a high accuracy on the training set and on the test set, the neural network over-fits the CelebA dataset and does not generalise at all on real world images as taken from RoboFace. He completely fails by saying that in the following image, there is a male with no beard with probabilities around 90\%
 	\includegraphics[width=\linewidth]{images/lossBad}\\
 	\includegraphics[width=0.2\linewidth]{images/failMaleNoBeard}\\
 	
@@ -139,7 +139,7 @@
 	'Black Hair', \textcolor{red}{'Male'}, 'Straight Hair'\\
 	\includegraphics[height=0.2\textheight]{images/leti_normalised0}
 	\section{Outlook}
-	Verbeserung der Hardware
+	Hardware improvements
 	\section{Source code}
 	Can be found on	https://github.com/LetiP/RoboFace
 	
