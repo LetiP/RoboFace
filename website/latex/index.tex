@@ -68,17 +68,19 @@
 	\item conda install -c menpo opencv3=3.1.0
 	\item conda install keras
 	\end{itemize}
-	Then, for running the software, execute the python script \texttt{face\_detection/face\_detection.py}
+	Then for running the software, execute the python script \texttt{face\_detection/face\_detection.py}
 	
 	If you eventually want to retrain the network for further improvement of the results, then you should take a look in te \texttt{neural\_network\_training/train\_normalised.py} script.
 	\subsection{Face attribute detection - The magic behind neural networks}
 	The task to give RoboFace his understanding of the world through the webcam he uses to perceive, belongs to the problems that computer vision tries to solve. The algorithm of our choice is a convolutional neural network (CNN), since neural networks are the state of the art today in computer vision.
 	
+	Our implementation is a supervised learning algorithm, since we feed in labels (groundtruth) for every training image. We define a loss function that minimises the distance between the prediction and the true label. In this way, we learn the actual representation of the training data and can apply it to our test images and on RoboFace.
+	
 	A neural network is composed of linear functions called neurons, followed by a nonlinear transformation. We can not only have many neurons per layer, but also stack layers consecutively. This results in a much better and faster training, since the minimum of the non-convex function we want to minimise in training is a better one , so closer to the global optimum we can not find. But interesting is, that it was mathematically proven, that a single hidden layer (so a neural network containing input, output and one middle layer) of finite number of neurons, is enough for approximating any continous function. For more details, see the universal approximation theorem.
 	
 	% image of one hidden layer, more, one neuron
 	
-	The architecture says how this neurons are stacked in layers. A widely used layer in vision solving algorithms is one implementing convolutions. This is inspired by the human vision system, that also bundles a region of photosensitive cells and combine their signal into one neuron that send his own output to be processed further.
+	The architecture defines how this neurons are stacked in layers. A widely used layer in vision solving algorithms is one implementing convolutions. This is inspired by the human vision system, that also bundles a region of photosensitive cells and combine their signal into one neuron that send his own output to be processed further.
 	
 	\subsubsection{Architecture}
 	We take more of this convolutional layers and stack them together, to generate a so called deep neural network. The deepness shows its effectiveness in maximising the field of view of the network. Since a single convolution has for example the size 9 x 9, one layer can see only this much context. But stacking a next convolutional layer, the output of the previous 9 x 9 is considered again in 7 x 7 window for example, grows the field of view of the second layer considerably.
