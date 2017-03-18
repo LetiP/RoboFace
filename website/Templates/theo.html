@@ -106,7 +106,7 @@
 				</ul>
 			</div>
 			<div class="col-md-6">
-					<img src="../Static/Content/CelebA.png" style="max-width: 100%">
+					<img src="../Static/Content/CelebA.jpg" style="max-width: 100%">
 			</div>
 		</div>
 		<h3>Training dataset</h3>
@@ -139,13 +139,14 @@
 				</ol>
 			</div>
 			<div class="col-md-6">
-				<img src="../Static/Content/CelebAExamples.png" style="max-width: 96%">
+				<img src="../Static/Content/CelebAExamples.jpg" style="max-width: 96%">
+				<figcaption style="text-align: center">CelebA sample images</figcaption>
 			</div>
 		</div>
 		<h3>Training the neural network</h3>
 		<p>
 			The neural network implementation is done with the keras module using the TensorFlow
-			backend. For training the neural network, we make use of the parallelizing capacity of
+			backend. For training the neural network, we make use of the parallelising capacity of
 			the GPU, which results into a training time of 2 seconds per 1024 images. CPU training
 			is obviously much slower. The optimiser for finding a good local optimum of the loss
 			function is the Adadelta optimiser from keras, which stands out for his adaptive learning
@@ -167,6 +168,7 @@
 			</div>
 			<div class="col-md-2" style="padding-left: 0px">
 				<img src="../Static/Content/failMaleNoBeard.jpg" style="max-width: 100%;">
+				<figcaption style="text-align: center">Example of image where the prediction is male and no beard.</figcaption>
 			</div>
 		</div>
 		<br />

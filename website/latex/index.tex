@@ -80,7 +80,7 @@
 	
 	% image of one hidden layer, more, one neuron
 	
-	The architecture defines how this neurons are stacked in layers. A widely used layer in vision solving algorithms is one implementing convolutions. This is inspired by the human vision system, that also bundles a region of photosensitive cells and combine their signal into one neuron that send his own output to be processed further.
+	The architecture defines how this neurons are stacked in layers. A widely used layer in vision solving algorithms is implementing convolutions. This is inspired by the human vision system, that also bundles a region of photosensitive cells and combine their signal into one neuron that send his own output to be processed further.
 	
 	\subsubsection{Architecture}
 	We take more of this convolutional layers and stack them together, to generate a so called deep neural network. The deepness shows its effectiveness in maximising the field of view of the network. Since a single convolution has for example the size 9 x 9, one layer can see only this much context. But stacking a next convolutional layer, the output of the previous 9 x 9 is considered again in 7 x 7 window for example, grows the field of view of the second layer considerably.
