@@ -76,7 +76,7 @@
 			<br />% image of a ReLU TODO
 		</p>
 		<p>
-			The dropout layers in our architecture shut down randomly 25% and 50% of the neurons in order to make a better generalising neural network, since the neurons do not get the chance to learn the data by heart and over-fit.
+			Dropout layers in our architecture shut down randomly 25% and 50% of the neurons in order to make a better generalising neural network, since the neurons do not get the chance to learn the data by heart and over-fit.
 		</p>
 		<p>
 			The dense layer is connecting every neuron in the previous one with the ones in the current layer. Hence it contains more parameters than the convolutional ones, where the weights are vastly shared. We can interpret the role of the dense layers as the classification step in the network, whereas the convolutions did the feature extraction. So it is sensible to choose the number of neurons in the last layer as the amount of classes we want to predict, which is 13 in our case.
@@ -84,7 +84,7 @@
 		<div class="row">
 			<div class="col-md-6">
 				<p>
-					The last activation function in the network penalises for wrong classification. We use the binary crossentropy and not the categorical one, since the classes are not mutually dependent. We can have a male with straight hair, this attributes do not exclude each other. There are some which do, like straight and wavy hair, but firstly, a good trained network should not predict both at the same time, since it learned to distinguish one from another. Secondly, this can be avoided in a postprocessing step, at prediction time.
+					Our last activation function in the network is the sigmoid, it converts the output of the neurons to a probability in the interval [0, 1]. The loss function penalises for wrong classification. We use the binary crossentropy and not the categorical one, since the classes are not mutually dependent. We can have a male with straight hair, this attributes do not exclude each other. There are some which do, like straight and wavy hair, but firstly, a good trained network should not predict both at the same time, since it learned to distinguish one from another. Secondly, this can be avoided in a postprocessing step, at prediction time.
 
 				</p>
 				<ul>
@@ -139,7 +139,7 @@
 				</ol>
 			</div>
 			<div class="col-md-6">
-				<img src="../Static/Content/CelebAExamples.jpg" style="max-width: 96%">
+				<img src="../Static/Content/CelebAExamples.jpg" style="max-width: 94.5%">
 				<figcaption style="text-align: center">CelebA sample images</figcaption>
 			</div>
 		</div>
