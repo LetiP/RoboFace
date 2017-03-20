@@ -118,6 +118,10 @@ public:
         return isValidChannelArray(config.getChannels()) || isValidPositionArray(config.getPositions());
     }
 
+    int getMinPos() const { return minPos_; }
+    int getMaxPos() const { return maxPos_; }
+    int getRange() const { return maxPos_ - minPos_; }
+
 private:
     std::array<int, NUM_SERVOS> channels_;
     int minPos_;
@@ -137,10 +141,11 @@ private:
 class Face
 {
 public:
-    Face() : serialInterface_(nullptr)
+    Face(int x_len = 640 , int y_len = 480, const std::string & dev = "/dev/ttyACM0")
+    : x_len_(x_len), y_len_(y_len), serialInterface_(nullptr)
     {
         std::string error_msg;
-        serialInterface_ = RPM::SerialInterface::createSerialInterface("/dev/ttyACM0", 9600, &error_msg);
+        serialInterface_ = RPM::SerialInterface::createSerialInterface(dev, 9600, &error_msg);
 
         if (serialInterface_ == nullptr)
             throw std::runtime_error(error_msg);
@@ -151,30 +156,71 @@ public:
         delete serialInterface_;
     }
 
-    void neutral() { unsafeApplyConfig(neutralFace); }
-    void unsure()  { unsafeApplyConfig(unsureFace); }
-    void happy()   { unsafeApplyConfig(happyFace); }
-    void angry()   { unsafeApplyConfig(angryFace); }
-    void sad()     { unsafeApplyConfig(sadFace); }
+    void neutral(bool moveHead = true)
+    {
+        if (moveHead)
+            unsafeApplyConfig(neutralFaceMoveHead);
+        else
+            unsafeApplyConfig(neutralFace);
+    }
+
+    void unsure(bool moveHead = true)
+    {
+        if (moveHead)
+            unsafeApplyConfig(unsureFaceMoveHead);
+        else
+            unsafeApplyConfig(unsureFace);
+    }
+
+    void happy(bool moveHead = true)
+    {
+        if (moveHead)
+            unsafeApplyConfig(happyFaceMoveHead);
+        else
+            unsafeApplyConfig(happyFace);
+    }
+
+    void angry(bool moveHead = true)
+    {
+        if (moveHead)
+            unsafeApplyConfig(angryFaceMoveHead);
+        else
+            unsafeApplyConfig(angryFace);
+    }
+
+    void sad(bool moveHead = true)
+    {
+        if (moveHead)
+            unsafeApplyConfig(sadFaceMoveHead);
+        else
+            unsafeApplyConfig(sadFace);
+    }
+
+/*
+    void moveHeadVertically(int y)
+    {
+        ServoConfig<2> config = {{}}
+    }
 
     void moveHead(int x, int y)
     {
-        ServoConfig<2> config = {{Face::headMoveServoX_, Face::headMoveServoY_}, {x, y}};
+        ServoConfig<2> config = {{Face::headMoveServo1_, Face::headMoveServo2_},
+                                 {scaleX(x), scaleY(y)}};
         applyConfig(config);
     }
 
     void relativeMoveHead(int x_rel, int y_rel)
     {
-        unsigned short x_abs; serialInterface_->getPositionCP(headMoveServoX_, x_abs);
-        unsigned short y_abs; serialInterface_->getPositionCP(headMoveServoY_, y_abs);
+        unsigned short x_abs; serialInterface_->getPositionCP(headMoveServo1_, x_abs);
+        unsigned short y_abs; serialInterface_->getPositionCP(headMoveServo2_, y_abs);
 
-        int x = static_cast<int>(x_abs) + x_rel;
-        int y = static_cast<int>(y_abs) + y_rel;
+        int x = static_cast<int>(x_abs) + scaleX(x_rel);
+        int y = static_cast<int>(y_abs) + scaleY(y_rel);
 
-        ServoConfig<2> config = {{headMoveServoX_, headMoveServoY_}, {x, y}};
+        ServoConfig<2> config = {{headMoveServo1_, headMoveServo2_}, {x, y}};
         applyConfig(config);
     }
-
+*/
     template<size_t N>
     void applyConfig(const ServoConfig<N> & config)
     {
@@ -208,19 +254,38 @@ public:
     }
 
 private:
+    int scaleCoord(int c, int len) const
+    {
+        if (c > len || c < 0)
+            throw std::out_of_range("the coordinate must be in range [0, len]");
+        return ((c / len) * (constraints_.getRange())) + constraints_.getMinPos();
+    }
+
+    inline int scaleX(int x) const { scaleCoord(x, x_len_); }
+    inline int scaleY(int y) const { scaleCoord(y, y_len_); }
+
     static constexpr size_t numServos_ = NUMBER_OF_SERVOS;
-    static constexpr int headMoveServoX_= 4; // testing required
-    static constexpr int headMoveServoY_ = 12; // testing required
+    static constexpr int headMoveServo1_= 0;
+    static constexpr int headMoveServo2_ = 1;
     static const ServoConstraints<numServos_> constraints_;
 
     // basic emotions
-    static const ServoConfig<12> neutralFace;
-    static const ServoConfig<10> unsureFace;
-    static const ServoConfig<10> happyFace;
-    static const ServoConfig<10> angryFace;
-    static const ServoConfig<12> sadFace;
+    static const ServoConfig<12> neutralFaceMoveHead;
+    static const ServoConfig<10> unsureFaceMoveHead;
+    static const ServoConfig<10> happyFaceMoveHead;
+    static const ServoConfig<10> angryFaceMoveHead;
+    static const ServoConfig<12> sadFaceMoveHead;
+
+    static const ServoConfig<10> neutralFace;
+    static const ServoConfig<8> unsureFace;
+    static const ServoConfig<8> happyFace;
+    static const ServoConfig<8> angryFace;
+    static const ServoConfig<10> sadFace;
+
 
     RPM::SerialInterface* serialInterface_;
+    int x_len_;
+    int y_len_;
 };
 
 #undef NUMBER_OF_SERVOS
@@ -230,30 +295,56 @@ const ServoConstraints<Face::numServos_> Face::constraints_ = {
     4000, 8000, {0,1,2,3,4,5,6,7,8,9,10,12}
 };
 
-const ServoConfig<12> Face::neutralFace = {
+const ServoConfig<12> Face::neutralFaceMoveHead = {
     {0,    1,    2,    3,    4,    5,    6,    7,    8,    9,    10,   12},
     {6000, 8000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000}
 };
 
-const ServoConfig<10> Face::unsureFace = {
+const ServoConfig<10> Face::unsureFaceMoveHead = {
     {0,    1,    2,    3,    5,    6,    7,    8,    9,    10},
     {6000, 8000, 5000, 7000, 8000, 7000, 6250, 5000, 7000, 7000}
 };
 
-const ServoConfig<10> Face::happyFace = {
+const ServoConfig<10> Face::happyFaceMoveHead = {
     {0,    1,    2,    3,    5,     6,    7,    8,    9,    10},
     {6000, 8000, 7000, 7000, 70000, 4000, 5000, 5000, 8000, 5500}
 };
 
-const ServoConfig<10> Face::angryFace = {
+const ServoConfig<10> Face::angryFaceMoveHead = {
     {0,    1,    2,    3,    5,    6,    7,    8,    9,    10},
     {7000, 7800, 8000, 4800, 7750, 4800, 4500, 5750, 7500, 7200}
 };
 
-const ServoConfig<12> Face::sadFace = {
+const ServoConfig<12> Face::sadFaceMoveHead = {
     {0,    1,    2,    3,    4,    5,    6,    7,    8,    9,    10,   12},
     {7000, 7800, 4000, 4000, 6000, 4000, 4000, 8000, 8000, 8000, 8000, 6000}
 };
+
+const ServoConfig<10> Face::neutralFace = {
+    {2,    3,    4,    5,    6,    7,    8,    9,    10,   12},
+    {6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000, 6000}
+};
+
+const ServoConfig<8> Face::unsureFace = {
+    {2,    3,    5,    6,    7,    8,    9,    10},
+    {5000, 7000, 8000, 7000, 6250, 5000, 7000, 7000}
+};
+
+const ServoConfig<8> Face::happyFace = {
+    {2,    3,    5,     6,    7,    8,    9,    10},
+    {7000, 7000, 70000, 4000, 5000, 5000, 8000, 5500}
+};
+
+const ServoConfig<8> Face::angryFace = {
+    {2,    3,    5,    6,    7,    8,    9,    10},
+    {8000, 4800, 7750, 4800, 4500, 5750, 7500, 7200}
+};
+
+const ServoConfig<10> Face::sadFace = {
+    {2,    3,    4,    5,    6,    7,    8,    9,    10,   12},
+    {4000, 4000, 6000, 4000, 4000, 8000, 8000, 8000, 8000, 6000}
+};
+
 
 
 } // end namespace face

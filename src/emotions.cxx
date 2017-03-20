@@ -12,7 +12,12 @@ const string help_msg =
     "enter (3) for happy face\n"
     "enter (4) for angry face\n"
     "enter (5) for sad face\n"
-    "enter (6) to exit\n"
+    "enter (6) for neutral face without head movement\n"
+    "enter (7) for unsure face without head movement\n"
+    "enter (8) for happy face without head movement\n"
+    "enter (9) for angry face without head movement\n"
+    "enter (10) for sad face without head movement\n"
+    "enter (11) to exit\n"
 ;
 
 
@@ -58,12 +63,36 @@ int main()
                 f.sad();
                 break;
         case 6:
+                cout << "neutral face\n\n";
+                f.neutral(false);
+                break;
+
+        case 7:
+                cout << "unsure face\n\n";
+                f.unsure(false);
+                break;
+
+        case 8:
+                cout << "happy face\n\n";
+                f.happy(false);
+                break;
+
+        case 9:
+                cout << "angry face\n\n";
+                f.angry(false);
+                break;
+
+        case 10:
+                cout << "sad face\n\n";
+                f.sad(false);
+                break;
+        case 11:
                 cout << "exiting...\n\n";
                 i = -1;
                 break;
         default:
                 cout << "invalid input enter 0 for help\n\n";
-                i = 0;
+                i = -1;
                 break;
         }
     }
