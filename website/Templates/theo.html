@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>RoboFace</title>
+
+<link rel="stylesheet" type="text/css" href="../Static/Content/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="../Static/Content/RoboFace.css" />
+<script src="../Static/Scripts/jquery-3.2.0.slim.min.js"></script>
+<script src="../Static/Scripts/bootstrap.min.js"></script>
+
+</head>
+<body>
+	<nav class="nav navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button class="navbar-toggle collapsed" aria-expanded="false" aria-controls="navbar" type="button" data-toggle="collapse" data-target="#navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index.html">RoboFace</a>
+				<a class="face" href="index.html"><img src="../Static/Content/Zeichenfläche 1@0.5x.png" style="max-width: 23%; box-shadow: 0px 0px 0px;"></a>
+			</div>
+			<div class="navbar-collapse collapse" id="navbar">
+				<ul class="nav navbar-nav">
+					<li><a href="index.html">Home</a></li>
+					<li><a href="docu.html">Documentation</a></li>
+					<li class="active"><a href="#">Theory</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="container" style="margin-top: 50px">
+		<h1>Theory</h1>
+		<h2>Face attribute detection &ndash; The magic behind neural networks</h2>
+		<p>
+			The task to give RoboFace his understanding of the world through the webcam he uses
+			to perceive, belongs to the problems that computer vision tries to solve. The algorithm
+			of our choice is a convolutional neural network (CNN), since neural networks are the
+			state of the art today in computer vision.
+		</p>	
+		<p>
+			Our implementation is a supervised learning algorithm, since we feed in labels
+			(groundtruth) for every training image. We define a loss function that minimises the
+			distance between the prediction and the true label. In this way, we learn the actual
+			representation of the training data and can apply it to our test images and on RoboFace.
+		</p>
+		<div class="row">
+			<div class="col-md-8">
+				<p>
+					A neural network is composed of linear functions called neurons, followed by a nonlinear
+					transformation. We can not only have many neurons per layer, but also stack layers
+					consecutively. This results in a much better and faster training, since the minimum of
+					the non-convex function we want to minimise in training is a better one , so closer to the
+					global optimum we can not find. But interesting is, that it was mathematically proven,
+					that a single hidden layer (so a neural network containing input, output and one middle
+					layer) of finite number of neurons, is enough for approximating any continous function.
+					For more details, see the universal approximation theorem.
+				</p>
+				<p>
+					The architecture defines how this neurons are stacked in layers. A widely used layer
+					in vision solving algorithms is one implementing convolutions. This is inspired by the
+					human vision system, that also bundles a region of photosensitive cells and combine their
+					signal into one neuron that send his own output to be processed further. In the minimalistic example on the right,
+					you cna see the nomenclature. Notice that the first layer implements a 2 convolution, since a neuron gets input only from two neighbors. The second layer is a fully connected layer, since every neuron is connected to every other.
+				</p>
+			</div>
+			<div class="col-md-4" style="padding-left: 0px">
+				<img src="../Static/Content/hiddenLayers.svg" style="max-width: 100%">
+				<figcaption style="text-align: center">Minimalistic example of a two hidden layer neural network.</figcaption>
+			</div>
+		</div>
+		<h3>Architecture</h3>
+		<p>
+			We take more of this convolutional layers and stack them together, to generate a so called deep neural network. The deepness shows its effectiveness in maximising the field of view of the network. Since a single convolution has for example the size 9 x 9, one layer can see only this much context. But stacking a next convolutional layer, the output of the previous 9 x 9 is considered again in 7 x 7 window for example, grows the field of view of the second layer considerably.
+		</p>
+		<img src="../Static/Content/architecture.svg" style="max-width: 100%; display: block; margin: auto">
+		<br />
+		<p>
+			In the architecture we implemented, there is a Max Pooling Layer following every convolution step. This layer is actually downscaling the image to the half, in order to reduce the number of parameters and avoid redundancy of information.
+		</p>
+		<div class="row">
+			<div class="col-md-9">
+				<p>
+					The activations representing the nonlinearity is the ReLU (rectified linear unit) which penalises for wrong answers of each neuron during training. The piecewise linear function has the advantage that it rewards for the good answer in proportionality to the distance to the truth. But it has the disatvantage, that the neurons specialise in recognising their pattern and have no feedback when an arbitrary pattern is present. As an alternative, one can choose the LeakyReLU, which also introducing a slope for the wrong predictions. A very popular version is the ELU, that saturates in the negative regime, as seen in red in the figure.
+				</p>
+				<p>
+					Dropout layers in our architecture shut down randomly 25% and 50% of the neurons in order to make a better generalising neural network, since the neurons do not get the chance to learn the data by heart and over-fit.
+				</p>
+			</div>
+			<div class="col-md-3" style="padding-left: 0px">
+				<img src="../Static/Content/relu.svg" style="max-width: 100%">
+				<figcaption style="text-align: center"><span style="color:blue">ReLU</span>, <span style="color:green">LeakyReLU</span>, <span style="color:red">ReLU</span></figcaption>
+			</div>
+		</div>
+		<p>
+			The dense layer is connecting every neuron in the previous one with the ones in the current layer. Hence it contains more parameters than the convolutional ones, where the weights are vastly shared. We can interpret the role of the dense layers as the classification step in the network, whereas the convolutions did the feature extraction. So it is sensible to choose the number of neurons in the last layer as the amount of classes we want to predict, which is 13 in our case.
+		</p>
+		<div class="row">
+			<div class="col-md-6">
+				<p>
+					Our last activation function in the network is the sigmoid, it converts the output of the neurons to a probability in the interval [0, 1]. The loss function penalises for wrong classification. We use the binary crossentropy and not the categorical one, since the classes are not mutually dependent. We can have a male with straight hair, this attributes do not exclude each other. There are some which do, like straight and wavy hair, but firstly, a good trained network should not predict both at the same time, since it learned to distinguish one from another. Secondly, this can be avoided in a postprocessing step, at prediction time.
+
+				</p>
+				<ul>
+					<li>32 neurons in each convolutional layer</li>
+					<li>activation functions: ReLU</li>
+					<li>9 x 9 convolution &rarr; Max Pooling</li>
+					<li>7 x 7 convolution &rarr; Max Pooling</li>
+					<li>5 x 5 convolution &rarr; Max Pooling</li>
+					<li>3 x 3 convolution &rarr; Max Pooling</li>
+					<li>3 x 3 convolution &rarr; Max Pooling</li>
+					<li>Dropout(0.25)</li>
+					<li>512 Dense</li>
+					<li>Dropout(0.5)</li>
+					<li>13 Dense</li>
+					<li>Sigmoid</li>
+					<li>Binary Crossentropy</li>
+					<li>Adadelta optimiser</li>
+					<li>Overall: 125,709 porameters</li>
+				</ul>
+			</div>
+			<div class="col-md-6">
+					<img src="../Static/Content/CelebA.jpg" style="max-width: 100%">
+			</div>
+		</div>
+		<h3>Training dataset</h3>
+		<div class="row">
+			<div class="col-md-6">
+				<p>
+					For training a neural network that generalises as much as possible, we take the big CelebA
+					dataset, which is freely available at <a href="http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html">http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html</a>.
+					It contains 202.599 images of 10.177 celebrities annotated with 40 attributes per image.
+				</p>
+				<p>
+					From this attributes, we take 13 that are based only of the face region (so not taking
+					the neck, shoulders or head top into account) and those where we think RoboFace could
+					make something of. These are:
+				</p>
+				<ol>
+					<li>black hair</li>
+					<li>blond hair</li>
+					<li>brown hair</li>
+					<li>eyeglasses</li>
+					<li>grey hair</li>
+					<li>male</li>
+					<li>mouth slightly open</li>
+					<li>no beard</li>
+					<li>smiling</li>
+					<li>straight hair</li>
+					<li>wavy hair</li>
+					<li>wearing earrings</li>
+					<li>wearing lipstick</li>
+				</ol>
+			</div>
+			<div class="col-md-6">
+				<img src="../Static/Content/CelebAExamples.jpg" style="max-width: 94.5%">
+				<figcaption style="text-align: center">CelebA sample images</figcaption>
+			</div>
+		</div>
+		<h3>Training the neural network</h3>
+		<p>
+			The neural network implementation is done with the keras module using the TensorFlow
+			backend. For training the neural network, we make use of the parallelising capacity of
+			the GPU, which results into a training time of 2 seconds per 1024 images. CPU training
+			is obviously much slower. The optimiser for finding a good local optimum of the loss
+			function is the Adadelta optimiser from keras, which stands out for his adaptive learning
+			rate and faster convergence than normal stochastic gradient descent SGD. The overall
+			125.709 parameters are found in this way.
+		</p>
+		<h3>Data normalisation</h3>
+		<p>
+			A wrong way to train the neural network is to feed in the CelebA images from the
+			dataset exactly as they are. Even though the training curve looks very fine, since
+			we achieve a low loss value and a high accuracy on the training set and on the test
+			set, the neural network over-fits the CelebA dataset and does not generalise at all
+			on real world images as taken from RoboFace. He completely fails by saying that
+			in the following image, there is a male with no beard with probabilities around 90%.
+		</p>
+		<div class="row">
+			<div class="col-md-10">
+				<img src="../Static/Content/lossBad.jpg" style="max-width: 100%">
+			</div>
+			<div class="col-md-2" style="padding-left: 0px">
+				<img src="../Static/Content/failMaleNoBeard.jpg" style="max-width: 100%;">
+				<figcaption style="text-align: center">Example of image where the prediction is male and no beard.</figcaption>
+			</div>
+		</div>
+		<br />
+		<p>
+			The right way to do it, is by normalising the training and the test set, as well as the images
+			taken by RoboFace. This is done in <code>neural_network_training/normalisation.py</code>
+			the following steps:
+		</p>
+		<ol>
+			<li>center the eyes</li>
+			<li>resize images to have the same inter-ocular distance</li>
+			<li>rotate images to make the inter-ocular-line horizontal</li>
+			<li>resize image to 128 x 128 pixels</li>
+			<li>subtract the mean face</li>
+		</ol>
+		<p>
+			Now, the loss-accuracy curve looks as well as before, but the generalisation capabilities
+			are vastly enhanced.
+		</p>
+		<div class="row">
+			<div class="col-md-10">
+				<img src="../Static/Content/lossGood.jpg" style="max-width: 100%">
+			</div>
+			<div class="col-md-2" style="padding-left: 0px">
+				<figure>
+					<img src="../Static/Content/meanFace.jpg" style="max-width: 100%">
+					<figcaption style="text-align: center">Mean face</figcaption>
+				</figure>
+			</div>
+		</div>
+		<br />
+		<p>
+			In the plot showing the accuracy per each class, we see as expected, that wavy and
+			straight hair are comparably not distinguished that well. This comes form the fact, that
+			the normalisation step crops out most of the region that does not contain the face, so a
+			lot of hair information gets lost. The eyeglasses class, which is in the center of the face
+			image, gets the best accuracy.
+		</p>
+		<img src="../Static/Content/accuracy_on_classes.jpg" style="max-width: 60%; display:block; margin: auto">
+		
+		<h3> Results </h3>
+		<p>
+			In the following are some examples of the neural network predicting on images taken by
+			RoboFace.
+		</p>
+		<div class="row">
+			<div class="col-md-3">
+				<figure>
+					<img src="../Static/Content/leti_normalised110.jpeg" style="max-width: 100%; display: block; margin: auto">
+					<figcaption style="text-align: center">black hair, mouth slightly open, no beard, smiling, wearing earrings, wearing lipstick</figcaption>
+				</figure>
+			</div>
+			<div class="col-md-3">
+				<figure>
+					<img src="../Static/Content/leti_normalised111.jpeg" style="max-width: 100%; display: block; margin: auto">
+					<figcaption style="text-align: center">black hair, mouth slightly open, no beard, wearing lipstick</figcaption>
+				</figure>
+			</div>
+			<div class="col-md-3">
+				<figure>
+					<img src="../Static/Content/leti_normalised24.jpeg" style="max-width: 100%; display: block; margin: auto">
+					<figcaption style="text-align: center">black hair, mouth slightly open, no beard, smiling, straight hair, wearing earrings, wearing lipstick</figcaption>
+				</figure>
+			</div>
+			<div class="col-md-3">
+				<figure>
+					<img src="../Static/Content/leti_normalised0.jpeg" style="max-width: 100%; display: block; margin: auto">
+					<figcaption style="text-align: center">black hair, <span style="color:#FF021A">male</span>, straight hair</figcaption>
+				</figure>
+			</div>
+		</div>
+		<h3>Outlook</h3>
+		<p>
+			Hardware improvements...
+		</p>
+		
+	</div>
+
+	<nav class="navbar navbar-default">
+	    <div class="container text-right">
+	        <p class="navbar-text col-md-12 col-sm-12 col-xs-12">&copy; Letiția Pârcălăbescu, Kevin Kiefer</p>
+	    </div>
+	</nav>
+
+</body>
+</html>

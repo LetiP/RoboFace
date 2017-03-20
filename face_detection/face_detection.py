@@ -9,7 +9,7 @@ import glob
 import h5py
 import math
 from datetime import datetime
-
+import face
 
 IMAGE_SIZE = (128, 128)
 IOD = 40.0
@@ -204,10 +204,12 @@ if __name__ == "__main__":
             X_test -= meanFace
             classes = model.predict_classes(X_test, batch_size=32, verbose=0)
             proba = model.predict_proba(X_test, batch_size=32, verbose=0)
+            predicted_attributes = mapAttributes((proba > 0.2)[0])
             print( proba)
-            print(mapAttributes((proba > 0.2)[0]))
-            #print("Predicted class is {} with probability {}".format(prediction[classes[0]], proba))
+            print(predicted_attributes)
         # end NN stuff
+
+        # postprocessing and reaction step
 
         cv2.imshow("Webcam Preview", frame)
         rval, frame = vc.read()
