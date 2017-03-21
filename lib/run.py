@@ -157,6 +157,28 @@ def say(text):
     while mixer.music.get_busy():
         time.Clock().tick(10)
 
+def sayDoSomething(pred_attr, previouslyPredicted):
+    if 'Smiling' in pred_attr:
+        roboFace.happy()
+        say('I like it when people smile at me!')
+        return
+    if 'Male' in pred_attr and 'No_Beard' in pred_attr and len(pred_attr) == 2:
+        roboFace.unsure()
+        say('I am not pretty sure that my predictions are right.')
+        return
+    if 'Male' not in pred_attr:
+        say('You are a female, am I right?')
+        return
+    if 'Male' not in pred_attr and 'Wearing_Earrings' in pred_attr:
+        say('You are wearing beatiful earrings today!')
+        return
+    if 'Male' not in pred_attr and 'Wearing_Lipstick' in pred_attr:
+        say('I see you are wearing lipstick today. Pretty!')
+        return
+    if 'Blond_Hair' in pred_attr:
+        say('Nice blond hair.')
+        return
+
 if __name__ == "__main__":
     roboFace = face.Face()
     roboface.neutral()
@@ -190,22 +212,18 @@ if __name__ == "__main__":
             X_test -= meanFace
             classes = model.predict_classes(X_test, batch_size=32, verbose=0)
             proba = model.predict_proba(X_test, batch_size=32, verbose=0)
-            predicted_attributes = mapAttributes((proba > 0.4)[0])
+            pred_attr = mapAttributes((proba > 0.4)[0])
             print( proba)
-            print(predicted_attributes)
+            print(pred_attr)
         # end NN stuff
 
         # postprocessing and reaction step
-        if 'Smiling' in predicted_attributes:
-            roboFace.happy()
-        if 'Male' in predicted_attributes and 'No_Beard' in predicted_attributes and len(predicted_attributes) == 2:
-            roboFace.unsure()
-        if 'Male' not in predicted_attributes:
-            say('You are a female, am I right?')
+        sayDoSomething(pred_attr)
 
-        roboFace.sad()
-        roboFace.unsure()
-        roboFace.angry()
+
+        #roboFace.sad()
+        #roboFace.unsure()
+        #roboFace.angry()
 
         cv2.imshow("Webcam Preview", frame)
         rval, frame = vc.read()
