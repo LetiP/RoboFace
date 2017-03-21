@@ -17,6 +17,5 @@ BOOST_PYTHON_MODULE_INIT(face)
         .def("angry", &Face::angry)
         .def("sad", &Face::sad)
         .def("moveHead", &Face::moveHead)
-        .def("relativeMoveHead", &Face::relativeMoveHead)
     ;
 }
