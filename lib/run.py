@@ -7,6 +7,8 @@ from skimage.transform import resize, rotate
 import h5py
 import math
 import face
+import gTTS
+from pygame import mixer, time
 
 IMAGE_SIZE = (128, 128)
 IOD = 40.0
@@ -117,8 +119,9 @@ def detectFace(image):
         if len(eyes) == 2:
             left_eye = eyes[0][0:2]
             right_eye = eyes[1][0:2]
-            trackEyes(left_eye, right_eye)
-            # suggestion: skip this frame as prediction, so return None
+            x, y = np.mean(left_eye[0], right_eye[0]), np.mean(left_eye[1], right_eye[1])
+            face.moveHead(x, y)
+            # suggestion: skip this frame as prediction, so return None, image
         for (ex,ey,ew,eh) in eyes:
             cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
             if len(eyes) == 2 and np.abs(eyes[0,1] - eyes[1,1]) < 10:
@@ -130,9 +133,6 @@ def detectFace(image):
                 normalised_image = normaliseImage(cropped_image, real_eyes, -xcrop, -ycrop)
 
     return normalised_image, image
-
-def trackEyes(left_eye, right_eye):
-	raise NotImplementedError
 
 def mapAttributes(classes):
     '''
@@ -147,6 +147,15 @@ def mapAttributes(classes):
         if cl == True:
             result.append(attributes[i])
     return result
+
+def say(text):
+    tts = gTTS(text=text, lang='en')
+    tts.save("say.mp3")
+    mixer.init()
+    mixer.music.load('say.mp3')
+    mixer.music.play()
+    while mixer.music.get_busy():
+        time.Clock().tick(10)
 
 if __name__ == "__main__":
     roboFace = face.Face()
@@ -191,6 +200,8 @@ if __name__ == "__main__":
             roboFace.happy()
         if 'Male' in predicted_attributes and 'No_Beard' in predicted_attributes and len(predicted_attributes) == 2:
             roboFace.unsure()
+        if 'Male' not in predicted_attributes:
+            say('You are a female, am I right?')
 
         roboFace.sad()
         roboFace.unsure()
