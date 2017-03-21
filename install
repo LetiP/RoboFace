@@ -15,6 +15,9 @@ g++ -std=c++11 $dir/src/moveAll.cxx -I $dir/include/ -o $dir/bin/moveAll -lRapaP
 g++ -std=c++11 $dir/src/stableHeadStates.cxx -I $dir/include/ -o $dir/bin/stableHeadStates -lRapaPololuMaestro
 
 g++ -std=c++11 $dir/src/headTest1.cxx -I $dir/include/ -o $dir/bin/headTest1 -lRapaPololuMaestro
+g++ -std=c++11 $dir/src/headTest2.cxx -I $dir/include/ -o $dir/bin/headTest2 -lRapaPololuMaestro
+g++ -std=c++11 $dir/src/headTest3.cxx -I $dir/include/ -o $dir/bin/headTest3 -lRapaPololuMaestro
+g++ -std=c++11 $dir/src/headMoveXY.cxx -I $dir/include/ -o $dir/bin/headMoveXY -lRapaPololuMaestro
 
 # compile python modules
 g++ -std=c++11 $dir/python_bindings/face.cxx -o $dir/lib/face.o -c -fpic -I $dir/include $pyinc

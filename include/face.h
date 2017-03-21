@@ -196,31 +196,44 @@ public:
             unsafeApplyConfig(sadFace);
     }
 
-/*
-    void moveHeadVertically(int y)
+
+    void moveHeadX(int x)
     {
-        ServoConfig<2> config = {{}}
+        if (x > x_len_ || x < 0)
+            throw std::out_of_range("the x coordinate must be in range [0, x_len]");
+
+        ServoConfig<2> config = {{Face::headMoveServo1_, Face::headMoveServo2_},
+                                 {mapX_servo1(x), mapX_servo2(x)}};
+        applyConfig(config);
+    }
+
+    void moveHeadY(int y)
+    {
+        if (y > y_len_ || y < 0)
+            throw std::out_of_range("the y coordinate must be in range [0, y_len]");
+
+        ServoConfig<2> config = {{Face::headMoveServo1_, Face::headMoveServo2_},
+                                 {mapY_servo1(y), mapY_servo2(y)}};
+        applyConfig(config);
     }
 
     void moveHead(int x, int y)
     {
-        ServoConfig<2> config = {{Face::headMoveServo1_, Face::headMoveServo2_},
-                                 {scaleX(x), scaleY(y)}};
-        applyConfig(config);
+        if (x > x_len_ || x < 0)
+            throw std::out_of_range("the x coordinate must be in range [0, x_len]");
+
+        if (y > y_len_ || y < 0)
+            throw std::out_of_range("the y coordinate must be in range [0, y_len]");
+
+        ServoConfig<2> configX = {{Face::headMoveServo1_, Face::headMoveServo2_},
+                                 {mapX_servo1(x), mapX_servo2(x)}};
+        applyConfig(configX);
+
+        ServoConfig<2> configY = {{Face::headMoveServo1_, Face::headMoveServo2_},
+                                 {mapY_servo1(y), mapY_servo2(y)}};
+        applyConfig(configY);
     }
 
-    void relativeMoveHead(int x_rel, int y_rel)
-    {
-        unsigned short x_abs; serialInterface_->getPositionCP(headMoveServo1_, x_abs);
-        unsigned short y_abs; serialInterface_->getPositionCP(headMoveServo2_, y_abs);
-
-        int x = static_cast<int>(x_abs) + scaleX(x_rel);
-        int y = static_cast<int>(y_abs) + scaleY(y_rel);
-
-        ServoConfig<2> config = {{headMoveServo1_, headMoveServo2_}, {x, y}};
-        applyConfig(config);
-    }
-*/
     template<size_t N>
     void applyConfig(const ServoConfig<N> & config)
     {
@@ -254,15 +267,43 @@ public:
     }
 
 private:
-    int scaleCoord(int c, int len) const
+    int mapX_servo1(int x) const
     {
-        if (c > len || c < 0)
-            throw std::out_of_range("the coordinate must be in range [0, len]");
-        return ((c / len) * (constraints_.getRange())) + constraints_.getMinPos();
+        int x_len_2 = x_len_ / 2;
+        if (x < x_len_2)
+            x = ((x / x_len_2) * 2000) + 5000;
+        else
+            x = (((x - x_len_2) / x_len_2) * 1000) + 7000;
+        return roundTo50(x);
     }
 
-    inline int scaleX(int x) const { scaleCoord(x, x_len_); }
-    inline int scaleY(int y) const { scaleCoord(y, y_len_); }
+    int mapX_servo2(int x) const
+    {
+        x = ((x / x_len_) * 1000) + 7000;
+        return roundTo50(x);
+    }
+
+    int mapY_servo1(int y) const
+    {
+        y = ((y / y_len_) * 1000) + 6000;
+        return roundTo50(y);
+    }
+
+    int mapY_servo2(int y) const
+    {
+        y = ((y / y_len_) * 200) + 7800;
+        return roundTo5(y);
+    }
+
+    int roundTo50(int n) const
+    {
+        return 50 * (n / 50);
+    }
+
+    int roundTo5(int n) const
+    {
+        return 5 * (n / 5);
+    }
 
     static constexpr size_t numServos_ = NUMBER_OF_SERVOS;
     static constexpr int headMoveServo1_= 0;

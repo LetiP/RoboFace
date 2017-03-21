@@ -16,6 +16,7 @@ int main()
 
     for (int i = 6000, j = 8000; i <= 7000 && j >= 7800; i += 50, j -= 5)
     {
+        cout << "servo 0 == " << i << " | servo 1 == " << j << endl;
         ServoConfig<2> config = {{0, 1}, {i, j}};
         f.applyConfig(config);
         this_thread::sleep_for(sec);
