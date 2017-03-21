@@ -15,7 +15,7 @@
    viewBox="0 0 280 67"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.1 r15371"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="architecture.svg">
   <defs
      id="defs2">
@@ -12136,18 +12136,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="1242.9265"
-     inkscape:cy="36.889225"
+     inkscape:zoom="2.7029297"
+     inkscape:cx="354.43399"
+     inkscape:cy="205.30555"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:snap-bbox="true"
      inkscape:bbox-nodes="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1017"
-     inkscape:window-x="1358"
-     inkscape:window-y="-8"
+     inkscape:window-width="3748"
+     inkscape:window-height="2124"
+     inkscape:window-x="92"
+     inkscape:window-y="36"
      inkscape:window-maximized="1"
      inkscape:snap-global="false"
      showguides="false">
@@ -14034,7 +14034,7 @@
          style="font-size:3.3635335px;stroke-width:0.31533125">13 output classes</tspan></text>
     <g
        id="g8188"
-       transform="matrix(1.1918032,0,0,1.1918032,-9.3015109,24.671667)">
+       transform="matrix(1.1918032,0,0,1.1918032,-9.5103378,24.045186)">
       <path
          sodipodi:nodetypes="cc"
          inkscape:connector-curvature="0"
@@ -14055,7 +14055,7 @@
     </g>
     <g
        id="g8183"
-       transform="matrix(1.1918032,0,0,1.1918032,3.4683547,21.244601)">
+       transform="matrix(1.1918032,0,0,1.1918032,6.7051717,20.61812)">
       <path
          sodipodi:nodetypes="cc"
          inkscape:connector-curvature="0"
@@ -14158,34 +14158,35 @@
            id="g10156-1"
            transform="translate(21.166667,7.9375007)">
           <g
-             id="g10150-6">
+             id="g10150-6"
+             transform="translate(17.437047,1.9838556)">
             <path
                style="fill:none;stroke:#000000;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker9813-8-1)"
-               d="M 70.114584,181.90625 H 80.697917"
+               d="m 70.114584,181.90625 10.583333,0"
                id="path7797-6-7"
                inkscape:connector-curvature="0"
                sodipodi:nodetypes="cc" />
           </g>
           <text
              id="text7777-4-2-3-6"
-             y="180.29712"
-             x="61.864571"
+             y="182.28098"
+             x="79.30162"
              style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
              xml:space="preserve"><tspan
                style="font-size:3.17500019px;stroke-width:0.26458332"
-               y="180.29712"
-               x="61.864571"
+               y="182.28098"
+               x="79.30162"
                id="tspan7775-4-4-79-7"
                sodipodi:role="line">7 x 7 convolution</tspan></text>
         </g>
         <g
            id="g10156-6"
-           transform="translate(92.604167,18.520834)">
+           transform="translate(128.10474,24.054747)">
           <g
              id="g10150-4">
             <path
                style="fill:none;stroke:#000000;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker9813-8-7)"
-               d="M 70.114584,181.90625 H 80.697917"
+               d="m 70.114584,181.90625 10.583333,0"
                id="path7797-6-3"
                inkscape:connector-curvature="0"
                sodipodi:nodetypes="cc" />
@@ -14204,12 +14205,12 @@
         </g>
         <g
            id="g10156-9"
-           transform="translate(63.5,13.229167)">
+           transform="translate(91.51376,18.220925)">
           <g
              id="g10150-8">
             <path
                style="fill:none;stroke:#000000;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker9813-8-0)"
-               d="M 70.114584,181.90625 H 80.697917"
+               d="m 70.114584,181.90625 10.583333,0"
                id="path7797-6-8"
                inkscape:connector-curvature="0"
                sodipodi:nodetypes="cc" />
@@ -14228,12 +14229,12 @@
         </g>
         <g
            id="g10156-6-8"
-           transform="translate(117.73958,22.489583)">
+           transform="translate(152.92691,27.710256)">
           <g
              id="g10150-4-2">
             <path
                style="fill:none;stroke:#000000;stroke-width:0.26458332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker9813-8-7-4)"
-               d="M 70.114584,181.90625 H 80.697917"
+               d="m 70.114584,181.90625 10.583333,0"
                id="path7797-6-3-5"
                inkscape:connector-curvature="0"
                sodipodi:nodetypes="cc" />

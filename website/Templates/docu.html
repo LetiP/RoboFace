@@ -36,7 +36,7 @@
 		<h1>Documentation</h1>
 		<h2>Setup guide for the robot</h2>
 		<h3>Hardware setup</h3>
-		<h4>Software setup</h4>
+		<h3>Software setup</h3>
 		<p>
 			The elaborated C++ code for controlling RoboFace has beautiful user frienly python
 			binaries. The following code example speaks for itself:
@@ -52,11 +52,13 @@
 		<p></p>
 		<p>
 			For using the face attribute detection software, a standard python (2.7 or 3.5) anaconda
-			installation should additionally include opencv, keras. You can easily install them using
+			installation should additionally include <code>opencv, keras</code>. Additionally, for text to speech synthesis, you should install <code>gTTS, pygame</code>. You can easily install them using
 			conda with the following commands:
 			<pre><code>
 	conda install -c menpo opencv3=3.1.0
 	conda install keras
+	pip install gTTS
+	pip install pygame
 			</code></pre>
 		<p></p>
 		<p>
@@ -71,7 +73,7 @@
 
 	<nav class="navbar navbar-default">
 	    <div class="container text-right">
-	        <p class="navbar-text col-md-12 col-sm-12 col-xs-12">&copy; Letiția Pârcălăbescu, Kevin Kiefer</p>
+	        <p class="navbar-text col-md-12 col-sm-12 col-xs-12" style="font-size:80%;">&copy; Letiția Pârcălăbescu, Kevin Kiefer</p>
 	    </div>
 	</nav>
 

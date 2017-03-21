@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+subl <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -35,9 +35,10 @@
 	<div class="container" style="margin-top: 50px">
 		<h1>Theory</h1>
 		<h2>Face attribute detection &ndash; The magic behind neural networks</h2>
-		<p>
-			The task to give RoboFace his understanding of the world through the webcam he uses
-			to perceive, belongs to the problems that computer vision tries to solve. The algorithm
+		<p>	
+			RoboFace perceives the environment through the webcam in his forehead. The task to give him
+			understanding of the world through the image stream from the webcam belongs to the problems
+			that computer vision tries to solve. The algorithm
 			of our choice is a convolutional neural network (CNN), since neural networks are the
 			state of the art today in computer vision.
 		</p>	
@@ -51,10 +52,10 @@
 			<div class="col-md-8">
 				<p>
 					A neural network is composed of linear functions called neurons, followed by a nonlinear
-					transformation. We can not only have many neurons per layer, but also stack layers
+					transformation called activation function. We can not only have many neurons per layer, but also stack layers
 					consecutively. This results in a much better and faster training, since the minimum of
-					the non-convex function we want to minimise in training is a better one , so closer to the
-					global optimum we can not find. But interesting is, that it was mathematically proven,
+					the non-convex function we want to minimise in training is a better one (closer to the
+					global optimum). But interesting is, that it was mathematically proven,
 					that a single hidden layer (so a neural network containing input, output and one middle
 					layer) of finite number of neurons, is enough for approximating any continous function.
 					For more details, see the universal approximation theorem.
@@ -64,7 +65,7 @@
 					in vision solving algorithms is one implementing convolutions. This is inspired by the
 					human vision system, that also bundles a region of photosensitive cells and combine their
 					signal into one neuron that send his own output to be processed further. In the minimalistic example on the right,
-					you cna see the nomenclature. Notice that the first layer implements a 2 convolution, since a neuron gets input only from two neighbors. The second layer is a fully connected layer, since every neuron is connected to every other.
+					you can see the nomenclature. Notice that the first layer implements a 2 convolution, since a neuron gets input only from two neighbors. The second layer is a fully connected layer, since every neuron is connected to every other, as well as the last one.
 				</p>
 			</div>
 			<div class="col-md-4" style="padding-left: 0px">
@@ -101,7 +102,7 @@
 		<div class="row">
 			<div class="col-md-6">
 				<p>
-					Our last activation function in the network is the sigmoid, it converts the output of the neurons to a probability in the interval [0, 1]. The loss function penalises for wrong classification. We use the binary crossentropy and not the categorical one, since the classes are not mutually dependent. We can have a male with straight hair, this attributes do not exclude each other. There are some which do, like straight and wavy hair, but firstly, a good trained network should not predict both at the same time, since it learned to distinguish one from another. Secondly, this can be avoided in a postprocessing step, at prediction time.
+					Our last activation function in the network is the sigmoid, it converts the output of the neurons to a probability in the interval [0, 1]. The loss function penalises for wrong classification. We use the binary crossentropy and not the categorical one, since the classes are not mutually dependent. We can have a male with straight hair, this attributes do not exclude each other. There are some which do, like straight and wavy hair. But on the one hand, a good trained network should not predict both at the same time, since it learned to distinguish the classes well. On the orher hand, this can be avoided in a postprocessing step at prediction time.
 
 				</p>
 				<ul>
@@ -123,7 +124,7 @@
 				</ul>
 			</div>
 			<div class="col-md-6">
-					<img src="../Static/Content/CelebA.jpg" style="max-width: 100%">
+					<a href="http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html"><img src="../Static/Content/CelebA.jpg" style="max-width: 100%"></a>
 			</div>
 		</div>
 		<h3>Training dataset</h3>
@@ -156,13 +157,14 @@
 				</ol>
 			</div>
 			<div class="col-md-6">
-				<img src="../Static/Content/CelebAExamples.jpg" style="max-width: 94.5%">
+				<a href="http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html"><img src="../Static/Content/CelebAExamples.jpg" style="max-width: 94.5%"></a>
 				<figcaption style="text-align: center">CelebA sample images</figcaption>
 			</div>
 		</div>
 		<h3>Training the neural network</h3>
 		<p>
-			The neural network implementation is done with the keras module using the TensorFlow
+			The neural network implementation is done with the Python <code>keras</code> module using the
+			<a href="https://www.tensorflow.org/"> TensorFlow</a>
 			backend. For training the neural network, we make use of the parallelising capacity of
 			the GPU, which results into a training time of 2 seconds per 1024 images. CPU training
 			is obviously much slower. The optimiser for finding a good local optimum of the loss
@@ -178,6 +180,9 @@
 			set, the neural network over-fits the CelebA dataset and does not generalise at all
 			on real world images as taken from RoboFace. He completely fails by saying that
 			in the following image, there is a male with no beard with probabilities around 90%.
+			The reasons for the failure on our images of interest could be numerous: the illumination of
+			the images is different to theh training set, the background clutter
+			in our images is much higher than in CelebA. So the first solution idea is to cut out the background and concentrate only on the face.
 		</p>
 		<div class="row">
 			<div class="col-md-10">
@@ -259,16 +264,16 @@
 		</div>
 		<h3>Outlook</h3>
 		<p>
-			Hardware improvements...
+			Hardware improvements... More NN training...
 		</p>
 		
 	</div>
 
 	<nav class="navbar navbar-default">
 	    <div class="container text-right">
-	        <p class="navbar-text col-md-12 col-sm-12 col-xs-12">&copy; Letiția Pârcălăbescu, Kevin Kiefer</p>
+	        <p class="navbar-text col-md-12 col-sm-12 col-xs-12" style="font-size:80%;">&copy; Letiția Pârcălăbescu, Kevin Kiefer</p>
 	    </div>
 	</nav>
-
+	
 </body>
 </html>
