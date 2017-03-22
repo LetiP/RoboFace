@@ -226,12 +226,8 @@ public:
             throw std::out_of_range("the y coordinate must be in range [0, y_len]");
 
         ServoConfig<2> configX = {{Face::headMoveServo1_, Face::headMoveServo2_},
-                                 {mapX_servo1(x), mapX_servo2(x)}};
+                                  {mapXY_servo1(x, y), mapXY_servo2(x, y)}};
         applyConfig(configX);
-
-        ServoConfig<2> configY = {{Face::headMoveServo1_, Face::headMoveServo2_},
-                                 {mapY_servo1(y), mapY_servo2(y)}};
-        applyConfig(configY);
     }
 
     template<size_t N>
@@ -270,29 +266,47 @@ private:
     int mapX_servo1(int x) const
     {
         int x_len_2 = x_len_ / 2;
+
         if (x < x_len_2)
-            x = ((x / x_len_2) * 2000) + 5000;
+            x = ((static_cast<float>(x) / x_len_2) * 2000) + 5000;
         else
-            x = (((x - x_len_2) / x_len_2) * 1000) + 7000;
+            x = ((static_cast<float>(x - x_len_2) / x_len_2) * 1000) + 7000;
+
         return roundTo50(x);
     }
 
     int mapX_servo2(int x) const
     {
-        x = ((x / x_len_) * 1000) + 7000;
+        x = ((static_cast<float>(x) / x_len_) * 1000) + 7000;
         return roundTo50(x);
     }
 
     int mapY_servo1(int y) const
     {
-        y = ((y / y_len_) * 1000) + 6000;
+        y = ((static_cast<float>(y) / y_len_) * 1000) + 6000;
         return roundTo50(y);
     }
 
     int mapY_servo2(int y) const
     {
-        y = ((y / y_len_) * 200) + 7800;
+        y = ((static_cast<float>(y) / y_len_) * 200) + 7800;
         return roundTo5(y);
+    }
+
+    int mapXY_servo1(int x, int y) const
+    {
+        constexpr float weightX1 = 0.5;
+        constexpr float weightY1 = 0.5;
+        static_assert(weightX1 + weightY1 == 1.0, "weightX1 + weightY1 must be equal to 1");
+        return weightX1 * mapX_servo1(x) + weightY1 * mapY_servo1(y);
+    }
+
+    int mapXY_servo2(int x, int y) const
+    {
+        constexpr float weightX2 = 0.5;
+        constexpr float weightY2 = 0.5;
+        static_assert(weightX2 + weightY2 == 1.0, "weightX2 + weightY2 must be equal to 1");
+        return weightX2 * mapX_servo2(x) + weightY2 * mapY_servo2(y);
     }
 
     int roundTo50(int n) const
