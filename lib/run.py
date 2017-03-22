@@ -7,7 +7,7 @@ from skimage.transform import resize, rotate
 import h5py
 import math
 import face
-import gTTS
+from gtts import gTTS
 from pygame import mixer, time
 
 IMAGE_SIZE = (128, 128)
@@ -87,7 +87,9 @@ def normaliseImage(image, eyes, xcrop, ycrop):
     ymin = max(0, ymin)
     ymax = min(im.shape[1], ymax)
     im = im[xmin:xmax, ymin:ymax, :]
-    im = resize(im, IMAGE_SIZE, mode='edge')
+    try:
+        im = resize(im, IMAGE_SIZE, mode='edge')
+    except: return None
     
     return im
 
@@ -117,10 +119,11 @@ def detectFace(image):
         # detect eyes for Inter Oculat Distance
         eyes = eye_cascade.detectMultiScale(roi_gray)
         if len(eyes) == 2:
-            left_eye = eyes[0][0:2]
-            right_eye = eyes[1][0:2]
-            x, y = np.mean(left_eye[0], right_eye[0]), np.mean(left_eye[1], right_eye[1])
-            face.moveHead(x, y)
+            left_eye = eyes[0][0:2] + x 
+            right_eye = eyes[1][0:2] + y
+            eyex = int((left_eye[0] + right_eye[0])*.5)
+            eyey = int((left_eye[1] + right_eye[1])*.5)
+            roboFace.moveHead(int(np.abs(eyex-640)), int(np.abs(eyey-480)))
             # suggestion: skip this frame as prediction, so return None, image
         for (ex,ey,ew,eh) in eyes:
             cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
@@ -157,7 +160,7 @@ def say(text):
     while mixer.music.get_busy():
         time.Clock().tick(10)
 
-def sayDoSomething(pred_attr, previouslyPredicted):
+def sayDoSomething(pred_attr):
     if 'Smiling' in pred_attr:
         roboFace.happy()
         say('I like it when people smile at me!')
@@ -166,9 +169,9 @@ def sayDoSomething(pred_attr, previouslyPredicted):
         roboFace.unsure()
         say('I am not pretty sure that my predictions are right.')
         return
-    if 'Male' not in pred_attr:
-        say('You are a female, am I right?')
-        return
+    # if 'Male' not in pred_attr:
+    #     say('You are a female, am I right?')
+    #     return
     if 'Male' not in pred_attr and 'Wearing_Earrings' in pred_attr:
         say('You are wearing beatiful earrings today!')
         return
@@ -181,7 +184,7 @@ def sayDoSomething(pred_attr, previouslyPredicted):
 
 if __name__ == "__main__":
     roboFace = face.Face()
-    roboface.neutral()
+    roboFace.neutral()
     # with h5py.File('trained/trained_webcam.h5',  "a") as f:
     #     try:
     #         del f['/optimizer_weights']
@@ -191,7 +194,7 @@ if __name__ == "__main__":
     model = load_model('../face_detection/trained/pretrained_CelebA_normalised0203-05.h5')
 
     cv2.namedWindow("Webcam Preview")
-    vc = cv2.VideoCapture(0) # 0 for built-in webcam, 1 for robot
+    vc = cv2.VideoCapture(1) # 0 for built-in webcam, 1 for robot
 
     if vc.isOpened(): # try to get the first frame
         rval, frame = vc.read()
@@ -215,10 +218,10 @@ if __name__ == "__main__":
             pred_attr = mapAttributes((proba > 0.4)[0])
             print( proba)
             print(pred_attr)
-        # end NN stuff
+            # end NN stuff
 
-        # postprocessing and reaction step
-        sayDoSomething(pred_attr)
+            # postprocessing and reaction step
+            # sayDoSomething(pred_attr)
 
 
         #roboFace.sad()

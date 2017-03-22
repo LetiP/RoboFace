@@ -38,6 +38,78 @@
 		<h3>Hardware setup</h3>
 		<h3>Software setup</h3>
 		<p>
+			class Face(Boost.Python.instance)
+ |  Method resolution order:
+ |      Face
+ |      Boost.Python.instance
+ |      __builtin__.object
+ |  
+ |  Methods defined here:
+ |  
+ |  __init__(...)
+ |      __init__( (object)arg1) -> None :
+ |      
+ |          C++ signature :
+ |              void __init__(_object*)
+ |  
+ |  __reduce__ = <unnamed Boost.Python function>(...)
+ |  
+ |  angry(...)
+ |      angry( (Face)arg1 [, (bool)moveHead=True]) -> None :
+ |          angry facial expression with optional head movement
+ |      
+ |          C++ signature :
+ |              void angry(face::Face {lvalue} [,bool=True])
+ |  
+ |  happy(...)
+ |      happy( (Face)arg1 [, (bool)moveHead=True]) -> None :
+ |          happy facial expression with optional head movement
+ |      
+ |          C++ signature :
+ |              void happy(face::Face {lvalue} [,bool=True])
+ |  
+ |  moveHead(...)
+ |      moveHead( (Face)arg1, (int)x, (int)y) -> None :
+ |          move head horizontally and vertically
+ |      
+ |          C++ signature :
+ |              void moveHead(face::Face {lvalue},int,int)
+ |  moveHeadX(...)
+ |      moveHeadX( (Face)arg1, (int)x) -> None :
+ |          move head horizontally
+ |      
+ |          C++ signature :
+ |              void moveHeadX(face::Face {lvalue},int)
+ |  
+ |  moveHeadY(...)
+ |      moveHeadY( (Face)arg1, (int)y) -> None :
+ |          move head vertically
+ |      
+ |          C++ signature :
+ |              void moveHeadY(face::Face {lvalue},int)
+ |  
+ |  neutral(...)
+ |      neutral( (Face)arg1 [, (bool)moveHead=True]) -> None :
+ |          neutral facial expression with optional head movement
+ |      
+ |          C++ signature :
+ |              void neutral(face::Face {lvalue} [,bool=True])
+ |  
+ |  sad(...)
+ |      sad( (Face)arg1 [, (bool)moveHead=True]) -> None :
+ |          sad facial expression with optional head movement
+ |      
+ |          C++ signature :
+ |              void sad(face::Face {lvalue} [,bool=True])
+ |  
+ |  unsure(...)
+ |      unsure( (Face)arg1 [, (bool)moveHead=True]) -> None :
+ |          unsure facial expression with optional head movement
+ |      
+ |          C++ signature :
+ |              void unsure(face::Face {lvalue} [,bool=True])
+
+
 			The elaborated C++ code for controlling RoboFace has beautiful user frienly python
 			binaries. The following code example speaks for itself:
 			<pre><code>
