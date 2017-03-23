@@ -141,7 +141,7 @@ private:
 class Face
 {
 public:
-    Face(int x_len = 640 , int y_len = 480, float x_weight = 0.5f, float y_weight = 0.5f,
+    Face(int x_len = 640 , int y_len = 480, double x_weight = 0.5f, double y_weight = 0.5f,
          const std::string & dev = "/dev/ttyACM0")
     : x_len_(x_len), y_len_(y_len), x_weight_(x_weight), y_weight_(y_weight), serialInterface_(nullptr)
     {
@@ -371,8 +371,8 @@ private:
     RPM::SerialInterface* serialInterface_;
     int x_len_;
     int y_len_;
-    float x_weight_;
-    float y_weight_;
+    double x_weight_;
+    double y_weight_;
 };
 
 #undef NUMBER_OF_SERVOS
