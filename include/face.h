@@ -199,6 +199,7 @@ public:
 
     void moveHeadX(int x)
     {
+        x = invertX(x);
         if (x > x_len_ || x < 0)
             throw std::out_of_range("the x coordinate must be in range [0, x_len]");
 
@@ -209,6 +210,7 @@ public:
 
     void moveHeadY(int y)
     {
+        y = invertY(y);
         if (y > y_len_ || y < 0)
             throw std::out_of_range("the y coordinate must be in range [0, y_len]");
 
@@ -219,6 +221,8 @@ public:
 
     void moveHead(int x, int y)
     {
+        x = invertX(x);
+        y = invertY(y);
         if (x > x_len_ || x < 0)
             throw std::out_of_range("the x coordinate must be in range [0, x_len]");
 
@@ -317,6 +321,22 @@ private:
     int roundTo5(int n) const
     {
         return 5 * (n / 5);
+    }
+
+    int invertX(int x) const
+    {
+        return abs(x - x_len_);
+    }
+
+    int invertY(int y) const
+    {
+        return abs(y - y_len_);
+    }
+
+    int abs(int n) const
+    {
+        if (n < 0) return -n;
+        return n;
     }
 
     static constexpr size_t numServos_ = NUMBER_OF_SERVOS;
