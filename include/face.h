@@ -141,9 +141,13 @@ private:
 class Face
 {
 public:
-    Face(int x_len = 640 , int y_len = 480, const std::string & dev = "/dev/ttyACM0")
-    : x_len_(x_len), y_len_(y_len), serialInterface_(nullptr)
+    Face(int x_len = 640 , int y_len = 480, float x_weight = 0.5f, float y_weight = 0.5f,
+         const std::string & dev = "/dev/ttyACM0")
+    : x_len_(x_len), y_len_(y_len), x_weight_(x_weight), y_weight_(y_weight), serialInterface_(nullptr)
     {
+        if (x_weight_ + y_weight_ != 1.0f)
+            throw std::invalid_argument("x_weight + y_weight must be equal to 1.0");
+
         std::string error_msg;
         serialInterface_ = RPM::SerialInterface::createSerialInterface(dev, 9600, &error_msg);
 
@@ -299,18 +303,24 @@ private:
 
     int mapXY_servo1(int x, int y) const
     {
+        /*
         constexpr float weightX1 = 0.5;
         constexpr float weightY1 = 0.5;
         static_assert(weightX1 + weightY1 == 1.0, "weightX1 + weightY1 must be equal to 1");
         return weightX1 * mapX_servo1(x) + weightY1 * mapY_servo1(y);
+        */
+        return x_weight_ * mapX_servo1(x) + y_weight_ * mapY_servo1(y);
     }
 
     int mapXY_servo2(int x, int y) const
     {
+        /*
         constexpr float weightX2 = 0.5;
         constexpr float weightY2 = 0.5;
         static_assert(weightX2 + weightY2 == 1.0, "weightX2 + weightY2 must be equal to 1");
         return weightX2 * mapX_servo2(x) + weightY2 * mapY_servo2(y);
+        */
+        return x_weight_ * mapX_servo2(x) + y_weight_ * mapY_servo2(y);
     }
 
     int roundTo50(int n) const
@@ -361,6 +371,8 @@ private:
     RPM::SerialInterface* serialInterface_;
     int x_len_;
     int y_len_;
+    float x_weight_;
+    float y_weight_;
 };
 
 #undef NUMBER_OF_SERVOS
