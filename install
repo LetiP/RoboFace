@@ -12,8 +12,8 @@ rapalib="-Wl,-whole-archive -lRapaPololuMaestro -Wl,-no-whole-archive"
 g++ -std=c++11 $dir/src/emotions.cxx -I $dir/include/ -o $dir/bin/emotions -lRapaPololuMaestro
 g++ -std=c++11 $dir/src/headMove.cxx -I $dir/include/ -o $dir/bin/headMove -lRapaPololuMaestro
 g++ -std=c++11 $dir/src/moveAll.cxx -I $dir/include/ -o $dir/bin/moveAll -lRapaPololuMaestro
+g++ -std=c++11 $dir/src/moveOne.cxx -I $dir/include/ -o $dir/bin/moveOne -lRapaPololuMaestro
 g++ -std=c++11 $dir/src/stableHeadStates.cxx -I $dir/include/ -o $dir/bin/stableHeadStates -lRapaPololuMaestro
-
 g++ -std=c++11 $dir/src/headTest1.cxx -I $dir/include/ -o $dir/bin/headTest1 -lRapaPololuMaestro
 g++ -std=c++11 $dir/src/headTest2.cxx -I $dir/include/ -o $dir/bin/headTest2 -lRapaPololuMaestro
 g++ -std=c++11 $dir/src/headTest3.cxx -I $dir/include/ -o $dir/bin/headTest3 -lRapaPololuMaestro
