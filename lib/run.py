@@ -123,7 +123,7 @@ def detectFace(image):
             right_eye = eyes[1][0:2] + y
             eyex = int((left_eye[0] + right_eye[0])*.5)
             eyey = int((left_eye[1] + right_eye[1])*.5)
-            roboFace.moveHead(int(np.abs(eyex-640)), int(np.abs(eyey-480)))
+            roboFace.moveHead(eyex, eyey)
             # suggestion: skip this frame as prediction, so return None, image
         for (ex,ey,ew,eh) in eyes:
             cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
@@ -157,8 +157,8 @@ def say(text):
     mixer.init()
     mixer.music.load('say.mp3')
     mixer.music.play()
-    while mixer.music.get_busy():
-        time.Clock().tick(10)
+    # while mixer.music.get_busy():
+        # time.Clock().tick(10)
 
 def sayDoSomething(pred_attr):
     if 'Smiling' in pred_attr:
@@ -182,6 +182,13 @@ def sayDoSomething(pred_attr):
         say('Nice blond hair.')
         return
 
+def getProbaStream(probStream, probs):
+    if probStream == None:
+        probStream = probs
+    else:
+        probStream = np.vstack((probStream, probs))
+    return probStream
+
 if __name__ == "__main__":
     roboFace = face.Face()
     roboFace.neutral()
@@ -201,6 +208,8 @@ if __name__ == "__main__":
     else:
         rval = False
 
+    probStream = None
+
     while rval:
         # cv2.imwrite('letiN/{}.jpg'.format(datetime.now().strftime('%Y-%m-%d_%H%M%S')), frame)
         normalised_image, frame = detectFace(frame)      
@@ -215,13 +224,45 @@ if __name__ == "__main__":
             X_test -= meanFace
             classes = model.predict_classes(X_test, batch_size=32, verbose=0)
             proba = model.predict_proba(X_test, batch_size=32, verbose=0)
-            pred_attr = mapAttributes((proba > 0.4)[0])
+            pred_attr = mapAttributes((proba > 0.6)[0])
             print( proba)
             print(pred_attr)
+
+            probStream = getProbaStream(probStream, proba)
+            print probStream
+
+            # best = []
+            # proba = proba[0]
+            # if proba[0] > proba [1] and proba[0] > proba [4]:
+            #     best.append('Black_Hair')
+            # elif proba[1] > proba [0] and proba[1] > proba [4]:
+            #     best.append('Blond_Hair')
+            # elif proba[4] > proba [0] and proba[4] > proba [1]:
+            #     best.append('Brown_Hair')
+            # if proba[9] < proba[10]:
+            #     best.append('Straight_Hair')
+            # else:
+            #     best.append('Wavy_Hair')
+            # proba[0] = 0
+            # proba[1] = 0
+            # proba[4] = 0
+            # proba[9] = 0
+            # proba[10] = 0
+
+            # pred_attr = mapAttributes((proba > 0.6))
+            # print(best)
+
             # end NN stuff
 
             # postprocessing and reaction step
             # sayDoSomething(pred_attr)
+            # while mixer.music.get_busy():
+            #     cv2.imshow("Webcam Preview", frame)
+            #     rval, frame = vc.read()
+            #     key = cv2.waitKey(20)
+            #     if key == 27: # exit on ESC
+            #         break
+
 
 
         #roboFace.sad()
