@@ -1,6 +1,5 @@
 \select@language {english}
 \beamer@sectionintoc {1}{Problem}{2}{0}{1}
-\beamer@sectionintoc {2}{Dataset}{4}{0}{2}
-\beamer@sectionintoc {3}{Paper}{7}{0}{3}
-\beamer@sectionintoc {4}{Own Approach}{9}{0}{4}
-\beamer@sectionintoc {5}{References}{17}{0}{5}
+\beamer@sectionintoc {2}{Dataset}{5}{0}{2}
+\beamer@sectionintoc {3}{Own Approach}{8}{0}{3}
+\beamer@sectionintoc {4}{References}{17}{0}{4}

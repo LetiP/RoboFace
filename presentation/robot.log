@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/W32TeX) (preloaded format=pdflatex 2017.1.4)  16 MAR 2017 19:07
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/W32TeX) (preloaded format=pdflatex 2017.1.4)  24 MAR 2017 00:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1230,7 +1230,7 @@ LaTeX Font Warning: Font shape `T1/cmss/m/n' in size <4> not available
 [1{c:/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 ]
-<figures/roboFace.jpg, id=136, 3276.24pt x 1846.9pt>
+<figures/roboFace.jpg, id=129, 3276.24pt x 1846.9pt>
 File: figures/roboFace.jpg Graphic file (type jpg)
 
 <use figures/roboFace.jpg>
@@ -1243,7 +1243,7 @@ Overfull \vbox (7.68271pt too high) detected at line 62
 [2
 
  <./figures/roboFace.jpg>]
-<figures/webcam.pdf, id=187, 2517.07663pt x 3276.24pt>
+<figures/webcam.pdf, id=179, 2517.07663pt x 3276.24pt>
 File: figures/webcam.pdf Graphic file (type pdf)
 
 <use figures/webcam.pdf>
@@ -1252,143 +1252,149 @@ Package pdftex.def Info: figures/webcam.pdf used on input line 68.
  [3
 
  <./figures/webcam.pdf>]
-<figures/CelebA.png, id=244, 1443.3925pt x 1051.93pt>
+<figures/hiddenLayers.pdf, id=235, 845.04686pt x 500.76851pt>
+File: figures/hiddenLayers.pdf Graphic file (type pdf)
+
+<use figures/hiddenLayers.pdf>
+Package pdftex.def Info: figures/hiddenLayers.pdf used on input line 73.
+(pdftex.def)             Requested size: 187.447pt x 111.07869pt.
+ [4
+
+ <./figures/hiddenLayers.pdf>]
+<figures/CelebA.png, id=290, 1443.3925pt x 1051.93pt>
 File: figures/CelebA.png Graphic file (type png)
  <use figures/CelebA.png>
-Package pdftex.def Info: figures/CelebA.png used on input line 81.
+Package pdftex.def Info: figures/CelebA.png used on input line 86.
 (pdftex.def)             Requested size: 276.559pt x 201.55414pt.
 
-Overfull \vbox (11.18147pt too high) detected at line 81
+Overfull \vbox (11.18147pt too high) detected at line 86
  []
 
-[4
+[5
 
  <./figures/CelebA.png>]
-<figures/CelebAExamples.png, id=295, 1105.12875pt x 818.05624pt>
+<figures/CelebAExamples.png, id=339, 1105.12875pt x 818.05624pt>
 File: figures/CelebAExamples.png Graphic file (type png)
 
 <use figures/CelebAExamples.png>
-Package pdftex.def Info: figures/CelebAExamples.png used on input line 89.
+Package pdftex.def Info: figures/CelebAExamples.png used on input line 94.
 (pdftex.def)             Requested size: 276.559pt x 204.71327pt.
- [5
+ [6
 
- <./figures/CelebAExamples.png>] [6
-
-]
-<figures/paperArchitecture.png, id=392, 2992.17876pt x 1309.89375pt>
-File: figures/paperArchitecture.png Graphic file (type png)
-
-<use figures/paperArchitecture.png>
-Package pdftex.def Info: figures/paperArchitecture.png used on input line 122.
-(pdftex.def)             Requested size: 307.28987pt x 134.51482pt.
- [7
-
- <./figures/paperArchitecture.png>]
-<figures/response.png, id=443, 2011.515pt x 919.435pt>
-File: figures/response.png Graphic file (type png)
-
-<use figures/response.png>
-Package pdftex.def Info: figures/response.png used on input line 132.
-(pdftex.def)             Requested size: 307.28987pt x 140.44862pt.
- [8
-
- <./figures/response.png>] [9
+ <./figures/CelebAExamples.png>] [7
 
 ]
-<figures/lossBad.pdf, id=540, 1300.86pt x 433.62pt>
+[8
+
+] <figures/architecture.pdf, id=481, 796.67719pt x 190.63347pt>
+File: figures/architecture.pdf Graphic file (type pdf)
+
+<use figures/architecture.pdf>
+Package pdftex.def Info: figures/architecture.pdf used on input line 141.
+(pdftex.def)             Requested size: 368.7469pt x 88.23639pt.
+
+Overfull \hbox (32.57661pt too wide) in paragraph at lines 141--141
+[]|  []  
+ []
+
+[9
+
+ <./figures/architecture.pdf>]
+<figures/lossBad.pdf, id=2263, 1300.86pt x 433.62pt>
 File: figures/lossBad.pdf Graphic file (type pdf)
  <use figures/lossBad.pdf>
-Package pdftex.def Info: figures/lossBad.pdf used on input line 159.
+Package pdftex.def Info: figures/lossBad.pdf used on input line 147.
 (pdftex.def)             Requested size: 441.29408pt x 147.09625pt.
 
-Overfull \hbox (68.13556pt too wide) in paragraph at lines 159--159
+Overfull \hbox (68.13556pt too wide) in paragraph at lines 147--147
 |  []  
  []
 
 [10
 
  <./figures/lossBad.pdf>]
-<figures/failMaleNoBeard.pdf, id=910, 297.64983pt x 345.05959pt>
+<figures/failMaleNoBeard.pdf, id=2632, 297.64983pt x 345.05959pt>
 File: figures/failMaleNoBeard.pdf Graphic file (type pdf)
 
 <use figures/failMaleNoBeard.pdf>
-Package pdftex.def Info: figures/failMaleNoBeard.pdf used on input line 167.
+Package pdftex.def Info: figures/failMaleNoBeard.pdf used on input line 155.
 (pdftex.def)             Requested size: 126.8878pt x 147.09625pt.
  [11
 
  <./figures/failMaleNoBeard.pdf>]
-<figures/meanFace.pdf, id=970, 578.16pt x 433.62pt>
+<figures/meanFace.pdf, id=2691, 578.16pt x 433.62pt>
 File: figures/meanFace.pdf Graphic file (type pdf)
- <use figures/meanFace.pdf>
-Package pdftex.def Info: figures/meanFace.pdf used on input line 179.
+
+<use figures/meanFace.pdf>
+Package pdftex.def Info: figures/meanFace.pdf used on input line 167.
 (pdftex.def)             Requested size: 196.13069pt x 147.09625pt.
 
-Overfull \vbox (8.56111pt too high) detected at line 179
+Overfull \vbox (8.56111pt too high) detected at line 167
  []
 
 [12
 
  <./figures/meanFace.pdf>]
-<figures/lossGood.pdf, id=1032, 1300.86pt x 433.62pt>
+<figures/lossGood.pdf, id=2752, 1300.86pt x 433.62pt>
 File: figures/lossGood.pdf Graphic file (type pdf)
 
 <use figures/lossGood.pdf>
-Package pdftex.def Info: figures/lossGood.pdf used on input line 184.
+Package pdftex.def Info: figures/lossGood.pdf used on input line 172.
 (pdftex.def)             Requested size: 441.29408pt x 147.09625pt.
 
-Overfull \hbox (68.13556pt too wide) in paragraph at lines 184--184
+Overfull \hbox (68.13556pt too wide) in paragraph at lines 172--172
 []|  []  
  []
 
 [13
 
  <./figures/lossGood.pdf>]
-<figures/accuracy_on_classes.pdf, id=1372, 1336.995pt x 758.835pt>
+<figures/accuracy_on_classes.pdf, id=3091, 1336.995pt x 758.835pt>
 File: figures/accuracy_on_classes.pdf Graphic file (type pdf)
 
 <use figures/accuracy_on_classes.pdf>
-Package pdftex.def Info: figures/accuracy_on_classes.pdf used on input line 190
+Package pdftex.def Info: figures/accuracy_on_classes.pdf used on input line 178
 .
 (pdftex.def)             Requested size: 338.02072pt x 191.85037pt.
 
-Overfull \hbox (30.73085pt too wide) in paragraph at lines 190--190
+Overfull \hbox (30.73085pt too wide) in paragraph at lines 178--178
  [] 
  []
 
 [14
 
  <./figures/accuracy_on_classes.pdf>]
-<figures/leti_normalised110.jpeg, id=1467, 128.48pt x 128.48pt>
+<figures/leti_normalised110.jpeg, id=3185, 128.48pt x 128.48pt>
 File: figures/leti_normalised110.jpeg Graphic file (type jpg)
 
 <use figures/leti_normalised110.jpeg>
-Package pdftex.def Info: figures/leti_normalised110.jpeg used on input line 198
+Package pdftex.def Info: figures/leti_normalised110.jpeg used on input line 186
 .
 (pdftex.def)             Requested size: 73.54802pt x 73.54813pt.
 
-<figures/leti_normalised111.jpeg, id=1468, 128.48pt x 128.48pt>
+<figures/leti_normalised111.jpeg, id=3186, 128.48pt x 128.48pt>
 File: figures/leti_normalised111.jpeg Graphic file (type jpg)
 
 <use figures/leti_normalised111.jpeg>
-Package pdftex.def Info: figures/leti_normalised111.jpeg used on input line 198
+Package pdftex.def Info: figures/leti_normalised111.jpeg used on input line 186
 .
 (pdftex.def)             Requested size: 73.54802pt x 73.54813pt.
  [15
 
  <./figures/leti_normalised110.jpeg> <./figures/leti_normalised111.jpeg>]
-<figures/leti_normalised24.jpeg, id=1515, 128.48pt x 128.48pt>
+<figures/leti_normalised24.jpeg, id=3232, 128.48pt x 128.48pt>
 File: figures/leti_normalised24.jpeg Graphic file (type jpg)
 
 <use figures/leti_normalised24.jpeg>
-Package pdftex.def Info: figures/leti_normalised24.jpeg used on input line 207.
+Package pdftex.def Info: figures/leti_normalised24.jpeg used on input line 195.
 
 (pdftex.def)             Requested size: 73.54802pt x 73.54813pt.
 
-<figures/leti_normalised0.jpeg, id=1516, 128.48pt x 128.48pt>
+<figures/leti_normalised0.jpeg, id=3233, 128.48pt x 128.48pt>
 File: figures/leti_normalised0.jpeg Graphic file (type jpg)
 
 <use figures/leti_normalised0.jpeg>
-Package pdftex.def Info: figures/leti_normalised0.jpeg used on input line 207.
+Package pdftex.def Info: figures/leti_normalised0.jpeg used on input line 195.
 (pdftex.def)             Requested size: 73.54802pt x 73.54813pt.
  [16
 
@@ -1398,7 +1404,9 @@ LaTeX Font Info:    Try loading font information for T1+cmtt on input line 10.
 
 (c:/texlive/2016/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-)) [17
+))
+Package atenddvi Info: Last page = 17.
+ [17
 
 ]
 \tf@nav=\write6
@@ -1410,55 +1418,40 @@ File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 \tf@snm=\write8
 \openout8 = `robot.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 218.
-Package atveryend Info: Executing hook `AfterLastShipout' on input line 218.
- (./robot.aux
-
-Package atenddvi Warning: Rerun LaTeX, last page not yet found.
-
-
-Package animate Warning: @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-(animate)                @ Rerun to get internal references right! @
-(animate)                @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.
-
-)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 218.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 218.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 206.
+Package atveryend Info: Executing hook `AfterLastShipout' on input line 206.
+ (./robot.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 206.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 206.
 Package rerunfilecheck Info: File `robot.out' has not changed.
-(rerunfilecheck)             Checksum: 3C922676C15A7C7DFD72229BD6846A3C;216.
+(rerunfilecheck)             Checksum: 855BE420D37335E7BA28AA6F178A429E;176.
 
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
  ) 
 Here is how much of TeX's memory you used:
- 28884 strings out of 493013
- 534863 string characters out of 6136994
- 621570 words of memory out of 5000000
- 31809 multiletter control sequences out of 15000+600000
+ 28874 strings out of 493013
+ 534744 string characters out of 6136994
+ 621646 words of memory out of 5000000
+ 31803 multiletter control sequences out of 15000+600000
  20690 words of font info for 59 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  56i,20n,56p,10411b,755s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{Navigation18} has been referenced but does not ex
-ist, replaced by a fixed one
-
-{c:/texlive/2016/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}<c:/texliv
-e/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2016/te
-xmf-dist/fonts/type1/public/cm-super/sfsi0900.pfb><c:/texlive/2016/texmf-dist/f
-onts/type1/public/cm-super/sfss0600.pfb><c:/texlive/2016/texmf-dist/fonts/type1
-/public/cm-super/sfss0800.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/cm
--super/sfss0900.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/cm-super/sfs
-s1095.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/cm-super/sfss1440.pfb>
-<c:/texlive/2016/texmf-dist/fonts/type1/public/cm-super/sfsx1440.pfb><c:/texliv
-e/2016/texmf-dist/fonts/type1/public/cm-super/sftt0900.pfb>
-Output written on robot.pdf (17 pages, 19253255 bytes).
+{c:/texlive/2016/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}<c:/texl
+ive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2016/
+texmf-dist/fonts/type1/public/cm-super/sfsi0900.pfb><c:/texlive/2016/texmf-dist
+/fonts/type1/public/cm-super/sfss0600.pfb><c:/texlive/2016/texmf-dist/fonts/typ
+e1/public/cm-super/sfss0800.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/
+cm-super/sfss0900.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/cm-super/s
+fss1095.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/cm-super/sfss1440.pf
+b><c:/texlive/2016/texmf-dist/fonts/type1/public/cm-super/sfsx1440.pfb><c:/texl
+ive/2016/texmf-dist/fonts/type1/public/cm-super/sftt0900.pfb>
+Output written on robot.pdf (17 pages, 12539648 bytes).
 PDF statistics:
- 1660 PDF objects out of 1728 (max. 8388607)
- 1311 compressed objects within 14 object streams
- 49 named destinations out of 1000 (max. 500000)
- 200 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 3375 PDF objects out of 3580 (max. 8388607)
+ 2202 compressed objects within 23 object streams
+ 45 named destinations out of 1000 (max. 500000)
+ 192 words of extra memory for PDF output out of 10000 (max. 10000000)
 
