@@ -224,33 +224,49 @@ if __name__ == "__main__":
             X_test -= meanFace
             classes = model.predict_classes(X_test, batch_size=32, verbose=0)
             proba = model.predict_proba(X_test, batch_size=32, verbose=0)
-            pred_attr = mapAttributes((proba > 0.6)[0])
-            print( proba)
-            print(pred_attr)
+            # pred_attr = mapAttributes((proba > 0.6)[0])
+            # print( proba)
+            # print(pred_attr)
 
             probStream = getProbaStream(probStream, proba)
-            print probStream
+            # print probStream
+            if probStream.shape[0] > 10 and len(probStream.shape) >= 2:
+                meanProbs = np.mean(probStream, axis=0)
+                probStream = None
+                pred_attr = mapAttributes(meanProbs > 0.6)
+                print(meanProbs)
+                print(pred_attr)
 
-            # best = []
-            # proba = proba[0]
-            # if proba[0] > proba [1] and proba[0] > proba [4]:
-            #     best.append('Black_Hair')
-            # elif proba[1] > proba [0] and proba[1] > proba [4]:
-            #     best.append('Blond_Hair')
-            # elif proba[4] > proba [0] and proba[4] > proba [1]:
-            #     best.append('Brown_Hair')
-            # if proba[9] < proba[10]:
-            #     best.append('Straight_Hair')
-            # else:
-            #     best.append('Wavy_Hair')
-            # proba[0] = 0
-            # proba[1] = 0
-            # proba[4] = 0
-            # proba[9] = 0
-            # proba[10] = 0
 
-            # pred_attr = mapAttributes((proba > 0.6))
-            # print(best)
+                best = []
+                if meanProbs[0] > meanProbs [1] and meanProbs[0] > meanProbs [4]:
+                    best.append('Black_Hair')
+                elif meanProbs[1] > meanProbs [0] and meanProbs[1] > meanProbs [4]:
+                    best.append('Blond_Hair')
+                elif meanProbs[4] > meanProbs [0] and meanProbs[4] > meanProbs [1]:
+                    best.append('Brown_Hair')
+                if meanProbs[9] < meanProbs[10]:
+                    best.append('Straight_Hair')
+                else:
+                    best.append('Wavy_Hair')
+                if meanProbs[3] > 0.6:
+                    best.append('Eyeglasses')
+                if meanProbs[8] > 0.5:
+                    best.append('Smiling')
+                if meanProbs[11] > 0.11:
+                    best.append('Wearing_Earrings')
+                if meanProbs[12] > 0.11:
+                    best.append('Wearing_Lipstick')
+                if meanProbs[12] > 0.11 and meanProbs[11] > 0.11 and meanProbs[5] < 0.6:
+                    best.append('Female')
+                elif meanProbs[12] < 0.11 and meanProbs[11] < 0.11 and meanProbs[5] > 0.6:
+                    best.append('Male')
+                meanProbs[0] = 0
+                meanProbs[1] = 0
+                meanProbs[4] = 0
+                meanProbs[9] = 0
+                meanProbs[10] = 0
+                print("BEST", best)
 
             # end NN stuff
 
