@@ -161,26 +161,26 @@ def say(text):
         # time.Clock().tick(10)
 
 def sayDoSomething(pred_attr):
-    if 'Smiling' in pred_attr:
-        roboFace.happy()
-        say('I like it when people smile at me!')
-        return
-    if 'Male' in pred_attr and 'No_Beard' in pred_attr and len(pred_attr) == 2:
-        roboFace.unsure()
-        say('I am not pretty sure that my predictions are right.')
-        return
-    # if 'Male' not in pred_attr:
-    #     say('You are a female, am I right?')
+    talk = {'Smiling': 'I like it when people smile at me!',
+            'Female': 'You are a female, am I right?',
+            'Male': 'You are a male, am I right?',
+            'Wearing_Earrings': 'You are wearing beatiful earrings today!',
+            'Wearing_Lipstick': 'I see you are wearing lipstick today. Pretty!',
+            'Blond_Hair': 'Nice blond hair!',
+            'Eyeglasses': 'You are wearing eyeglasses!',
+            'Brown_Hair': 'You have nice brown hair!',
+            'Black_Hair': 'You have nice black hair!',
+            'Gray_Hair': 'You must be a wise man, judging by your gray hair!',
+            'Wavy_Hair': 'You have nice wavy hair!',
+            'Straight_Hair': 'You have nice'
+            }
+    index = np.random.randint(0, len(pred_attr))
+    say(talk[pred_attr[index]])
+
+    # if 'Smiling' in pred_attr:
+    #     roboFace.happy()
     #     return
-    if 'Male' not in pred_attr and 'Wearing_Earrings' in pred_attr:
-        say('You are wearing beatiful earrings today!')
-        return
-    if 'Male' not in pred_attr and 'Wearing_Lipstick' in pred_attr:
-        say('I see you are wearing lipstick today. Pretty!')
-        return
-    if 'Blond_Hair' in pred_attr:
-        say('Nice blond hair.')
-        return
+    # TODO Wavy, straight hair
 
 def getProbaStream(probStream, probs):
     if probStream == None:
@@ -190,7 +190,7 @@ def getProbaStream(probStream, probs):
     return probStream
 
 if __name__ == "__main__":
-    roboFace = face.Face()
+    roboFace = face.Face(x_weight=0.8, y_weight=0.2)
     roboFace.neutral()
     # with h5py.File('trained/trained_webcam.h5',  "a") as f:
     #     try:
@@ -209,6 +209,7 @@ if __name__ == "__main__":
         rval = False
 
     probStream = None
+    saidNothing = True
 
     while rval:
         # cv2.imwrite('letiN/{}.jpg'.format(datetime.now().strftime('%Y-%m-%d_%H%M%S')), frame)
@@ -229,14 +230,17 @@ if __name__ == "__main__":
             # print(pred_attr)
 
             probStream = getProbaStream(probStream, proba)
-            # print probStream
-            if probStream.shape[0] > 10 and len(probStream.shape) >= 2:
+            if saidNothing and probStream.shape[0] < 10:
+                cv2.imshow("Webcam Preview", frame)
+                rval, frame = vc.read()
+                key = cv2.waitKey(20)
+                if key == 27: # exit on ESC
+                    break
+            elif probStream.shape[0] > 10 and len(probStream.shape) >= 2:
                 meanProbs = np.mean(probStream, axis=0)
-                probStream = None
+                # probStream = None
                 pred_attr = mapAttributes(meanProbs > 0.6)
                 print(meanProbs)
-                print(pred_attr)
-
 
                 best = []
                 if meanProbs[0] > meanProbs [1] and meanProbs[0] > meanProbs [4]:
@@ -261,29 +265,20 @@ if __name__ == "__main__":
                     best.append('Female')
                 elif meanProbs[12] < 0.11 and meanProbs[11] < 0.11 and meanProbs[5] > 0.6:
                     best.append('Male')
-                meanProbs[0] = 0
-                meanProbs[1] = 0
-                meanProbs[4] = 0
-                meanProbs[9] = 0
-                meanProbs[10] = 0
                 print("BEST", best)
 
-            # end NN stuff
+                # end NN stuff
 
-            # postprocessing and reaction step
-            # sayDoSomething(pred_attr)
-            # while mixer.music.get_busy():
-            #     cv2.imshow("Webcam Preview", frame)
-            #     rval, frame = vc.read()
-            #     key = cv2.waitKey(20)
-            #     if key == 27: # exit on ESC
-            #         break
-
-
-
-        #roboFace.sad()
-        #roboFace.unsure()
-        #roboFace.angry()
+                # postprocessing and reaction step
+                sayDoSomething(best)
+                saidNothing = False
+                while mixer.music.get_busy():
+                    probStream = None
+                    cv2.imshow("Webcam Preview", frame)
+                    rval, frame = vc.read()
+                    key = cv2.waitKey(20)
+                    if key == 27: # exit on ESC
+                        break
 
         cv2.imshow("Webcam Preview", frame)
         rval, frame = vc.read()
