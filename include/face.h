@@ -207,9 +207,9 @@ public:
         if (x > x_len_ || x < 0)
             throw std::out_of_range("the x coordinate must be in range [0, x_len]");
 
-        ServoConfig<2> config = {{Face::headMoveServo1_, Face::headMoveServo2_},
-                                 {mapX_servo1(x), mapX_servo2(x)}};
-        applyConfig(config);
+        ServoConfig<3> config = {{Face::headMoveServo1_, Face::headMoveServo2_, Face::eyeServo_},
+                                 {mapX_servo1(x), mapX_servo2(x), mapEye_servo(x)}};
+        unsafeApplyConfig(config);
     }
 
     void moveHeadY(int y)
@@ -220,7 +220,7 @@ public:
 
         ServoConfig<2> config = {{Face::headMoveServo1_, Face::headMoveServo2_},
                                  {mapY_servo1(y), mapY_servo2(y)}};
-        applyConfig(config);
+        unsafeApplyConfig(config);
     }
 
     void moveHead(int x, int y)
@@ -233,9 +233,9 @@ public:
         if (y > y_len_ || y < 0)
             throw std::out_of_range("the y coordinate must be in range [0, y_len]");
 
-        ServoConfig<2> configX = {{Face::headMoveServo1_, Face::headMoveServo2_},
-                                  {mapXY_servo1(x, y), mapXY_servo2(x, y)}};
-        applyConfig(configX);
+        ServoConfig<3> config = {{Face::headMoveServo1_, Face::headMoveServo2_, Face::eyeServo_},
+                                  {mapXY_servo1(x, y), mapXY_servo2(x, y), mapEye_servo(x)}};
+        unsafeApplyConfig(config);
     }
 
     template<size_t N>
@@ -244,8 +244,7 @@ public:
         if (!constraints_.isValidConfig(config))
             throw std::invalid_argument("the given servo config does not obey the constraints of the face");
 
-        for (auto i = 0; i < config.size(); ++i)
-            serialInterface_->setTargetCP(config.getChannel(i), config.getPosition(i));
+        unsafeApplyConfig(config);
     }
 
     template<size_t N>
@@ -271,6 +270,12 @@ public:
     }
 
 private:
+    int mapEye_servo(int x) const
+    {
+        x = ((static_cast<float>(x) / x_len_) * 4000) + 4000;
+        return x;
+    }
+
     int mapX_servo1(int x) const
     {
         int x_len_2 = x_len_ / 2;
@@ -303,23 +308,11 @@ private:
 
     int mapXY_servo1(int x, int y) const
     {
-        /*
-        constexpr float weightX1 = 0.5;
-        constexpr float weightY1 = 0.5;
-        static_assert(weightX1 + weightY1 == 1.0, "weightX1 + weightY1 must be equal to 1");
-        return weightX1 * mapX_servo1(x) + weightY1 * mapY_servo1(y);
-        */
         return x_weight_ * mapX_servo1(x) + y_weight_ * mapY_servo1(y);
     }
 
     int mapXY_servo2(int x, int y) const
     {
-        /*
-        constexpr float weightX2 = 0.5;
-        constexpr float weightY2 = 0.5;
-        static_assert(weightX2 + weightY2 == 1.0, "weightX2 + weightY2 must be equal to 1");
-        return weightX2 * mapX_servo2(x) + weightY2 * mapY_servo2(y);
-        */
         return x_weight_ * mapX_servo2(x) + y_weight_ * mapY_servo2(y);
     }
 
@@ -352,6 +345,7 @@ private:
     static constexpr size_t numServos_ = NUMBER_OF_SERVOS;
     static constexpr int headMoveServo1_= 0;
     static constexpr int headMoveServo2_ = 1;
+    static constexpr int eyeServo_ = 4;
     static const ServoConstraints<numServos_> constraints_;
 
     // basic emotions
