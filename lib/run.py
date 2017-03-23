@@ -174,13 +174,19 @@ def sayDoSomething(pred_attr):
             'Wavy_Hair': 'You have nice wavy hair!',
             'Straight_Hair': 'You have nice'
             }
+
+    if 'Smiling' in pred_attr:
+        roboFace.happy()
+    elif 'Black_Hair' in pred_attr:
+        roboFace.angry(moveHead=False)
+    elif 'Eyeglasses' in pred_attr:
+        roboFace.unsure(moveHead=False)
+    else:
+        roboFace.neutral()
+    
     index = np.random.randint(0, len(pred_attr))
     say(talk[pred_attr[index]])
 
-    # if 'Smiling' in pred_attr:
-    #     roboFace.happy()
-    #     return
-    # TODO Wavy, straight hair
 
 def getProbaStream(probStream, probs):
     if probStream == None:
@@ -209,11 +215,11 @@ if __name__ == "__main__":
         rval = False
 
     probStream = None
-    saidNothing = True
+    saidNothing = 0
 
     while rval:
         # cv2.imwrite('letiN/{}.jpg'.format(datetime.now().strftime('%Y-%m-%d_%H%M%S')), frame)
-        normalised_image, frame = detectFace(frame)      
+        normalised_image, frame = detectFace(frame)    
 
         # if a face is detected and the normalisation was successful, predict on it
         if normalised_image is not None:
@@ -230,7 +236,8 @@ if __name__ == "__main__":
             # print(pred_attr)
 
             probStream = getProbaStream(probStream, proba)
-            if saidNothing and probStream.shape[0] < 10:
+            if saidNothing == 0 and probStream.shape[0] < 10:
+                saidNothing += 1
                 cv2.imshow("Webcam Preview", frame)
                 rval, frame = vc.read()
                 key = cv2.waitKey(20)
@@ -271,14 +278,30 @@ if __name__ == "__main__":
 
                 # postprocessing and reaction step
                 sayDoSomething(best)
-                saidNothing = False
+                saidNothing = 0
                 while mixer.music.get_busy():
+                    _, frame = detectFace(frame)
                     probStream = None
                     cv2.imshow("Webcam Preview", frame)
                     rval, frame = vc.read()
                     key = cv2.waitKey(20)
                     if key == 27: # exit on ESC
                         break
+
+        elif saidNothing > 100:
+            roboFace.sad()
+            say("Hey, why is no one looking at me? I feel neglected. I feel it. I feel it! I am afraid!")
+            #TODO  play wir sind die Roboter
+            while mixer.music.get_busy():
+                _, frame = detectFace(frame)
+                probStream = None
+                cv2.imshow("Webcam Preview", frame)
+                rval, frame = vc.read()
+                key = cv2.waitKey(20)
+                if key == 27: # exit on ESC
+                    break
+        else:
+            saidNothing += 1
 
         cv2.imshow("Webcam Preview", frame)
         rval, frame = vc.read()
