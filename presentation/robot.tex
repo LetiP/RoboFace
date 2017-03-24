@@ -34,14 +34,14 @@
 
 \setbeamertemplate{footline}[frame number]
 
-\title[Deep Vision] %optional
+\title[Robotics] %optional
 {\textbf{Through the eyes of RoboFace}}
  
-\subtitle{Deep Vision -- final project}
+\subtitle{Robotics practical -- final project}
  
-\author{Letiția Elena Pârcălăbescu}
+\author{Kevin Kiefer, Letiția Elena Pârcălăbescu}
  
-\date{8\textsuperscript{th} of February 2017}
+\date{the 28\textsuperscript{th} of March 2017}
 
 \begin{document}
 \frame{\titlepage}
@@ -52,7 +52,7 @@
 %\end{frame}
 
 \section{Problem}
-\begin{frame}{RoboFace}{Problem description}
+\begin{frame}{RoboFace}{Deep Vision Problem}
 	\begin{figure}
 		\centering
 		\vspace*{-18mm}
@@ -61,10 +61,15 @@
 	\end{figure}
 \end{frame}
 
-\begin{frame}{RoboFace}{Problem description}
+\begin{frame}{RoboFace}{Deep Vision Problem}
 		\vspace*{-11.6mm}
 		\hspace*{2.85cm}
 		\includegraphics[width=0.61\linewidth]{figures/webcam}
+\end{frame}
+
+\begin{frame}{Deep Vision}{Short Intro into Neural Networks}
+	\centering
+	\includegraphics[width=0.61\linewidth]{figures/hiddenLayers}
 \end{frame}
 
 \section{Dataset}
@@ -88,7 +93,7 @@
 	\end{figure}
 \end{frame}
 
-\begin{frame}{CelebA dataset}{Attribute selection}
+\begin{frame}{CelebA Dataset}{Attribute Selection}
 	chose 13 labels out of 40 available
 	\begin{multicols}{2}
 	\begin{enumerate}
@@ -107,28 +112,6 @@
 	\item Wearing Lipstick
 	\end{enumerate}
 	\end{multicols}
-\end{frame}
-
-\section{Paper}
-% http://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Liu_Deep_Learning_Face_ICCV_2015_paper.pdf
-\begin{frame}{Deep Learning Face Attributes in the Wild}{\cite{liu2015faceattributes}}
-	\centering
-	Joint face localisation and attribute prediction using only image-level attribute tags.
-	\begin{figure}
-			\centering
-			\includegraphics[width=\linewidth]{figures/paperArchitecture}
-			\label{fig:paperarchi}
-	\end{figure}
-\end{frame}
-
-\begin{frame}{Deep Learning Face Attributes in the Wild}{\cite{liu2015faceattributes}}
-	\centering
-	Response map of the LNet (on attributes).
-	\begin{figure}
-			\centering
-			\includegraphics[width=\linewidth]{figures/response}
-			\label{fig:response}
-	\end{figure}
 \end{frame}
 
 \section{Own Approach}
@@ -150,6 +133,11 @@
 			\item	Adadelta optimiser
 			\item Overall: 125,709 parameters
 	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Own Approach}{Architecture}
+	\hspace*{-1.1cm}
+	\includegraphics[width=1.2\textwidth]{figures/architecture} 
 \end{frame}
 
 \begin{frame}{Own Approach}{How to not do it!}
@@ -178,18 +166,18 @@ Male (0.89), No beard (0.76) \\
 	\includegraphics[height=0.6\textheight]{figures/meanFace} 
 \end{frame}
 
-\begin{frame}{Own Approach}{Training curves}
+\begin{frame}{Own Approach}{Training Curves}
 \hspace*{-2.4cm}
 	\includegraphics[height=0.6\textheight]{figures/lossGood} 
 \end{frame}
 
-\begin{frame}{Own Approach}{Final accuracy per class}
+\begin{frame}{Own Approach}{Final Accuracy per Class}
 \centering
 overall accuracy of 90\%
 	\includegraphics[width=1.1\textwidth]{figures/accuracy_on_classes} 
 \end{frame}
 
-\begin{frame}{Exemplary results}
+\begin{frame}{Exemplary Results}
 \centering
 'Black Hair', 'Mouth Slightly Open', 'No Beard', 'Smiling', 'Wearing Earrings', 'Wearing Lipstick' \\
 \includegraphics[height=0.3\textheight]{figures/leti_normalised110} \\ 
@@ -197,7 +185,7 @@ overall accuracy of 90\%
 \includegraphics[height=0.3\textheight]{figures/leti_normalised111} 
 \end{frame}
 
-\begin{frame}{Exemplary results}
+\begin{frame}{Exemplary Results}
 'Black Hair', 'Mouth Slightly Open', 'No Beard', 'Smiling', 'Straight Hair', 'Wearing Earrings', \textcolor{red}{'Wearing Lipstick}
  \\
  \centering

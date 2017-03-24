@@ -1,7 +1,24 @@
+"""
+Running the trained neural network, normalise image and control RoboFace.
+Copyright (C) 2017 Letitia Parcalabescu
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
 import cv2
 import numpy as np
 from keras.models import load_model
-# from scipy import misc
 from scipy.misc import imresize
 from skimage.transform import resize, rotate
 import h5py
@@ -115,16 +132,15 @@ def detectFace(image):
         roi_color = image[y:y+h, x:x+w]
 
         # normalise image in order to predict on it
-        # croppedImage = imgCrop(image, face, boxScale=1)
-        # detect eyes for Inter Oculat Distance
+        # detect eyes for Inter Ocular Distance
         eyes = eye_cascade.detectMultiScale(roi_gray)
         if len(eyes) == 2:
             left_eye = eyes[0][0:2] + x 
             right_eye = eyes[1][0:2] + y
             eyex = int((left_eye[0] + right_eye[0])*.5)
             eyey = int((left_eye[1] + right_eye[1])*.5)
-            roboFace.moveHead(int(np.abs(eyex-640)), int(np.abs(eyey-480)))
-            # suggestion: skip this frame as prediction, so return None, image
+            roboFace.moveHead(eyex, eyey)
+            return None, image
         for (ex,ey,ew,eh) in eyes:
             cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
             if len(eyes) == 2 and np.abs(eyes[0,1] - eyes[1,1]) < 10:
@@ -157,33 +173,45 @@ def say(text):
     mixer.init()
     mixer.music.load('say.mp3')
     mixer.music.play()
-    while mixer.music.get_busy():
-        time.Clock().tick(10)
+    # while mixer.music.get_busy():
+        # time.Clock().tick(10)
 
 def sayDoSomething(pred_attr):
+    talk = {'Smiling': 'I like it when people smile at me!',
+            'Female': 'You are a female, am I right?',
+            'Male': 'You are a male, am I right?',
+            'Wearing_Earrings': 'You are wearing beatiful earrings today!',
+            'Wearing_Lipstick': 'I see you are wearing lipstick today. Pretty!',
+            'Blond_Hair': 'Nice blond hair!',
+            'Eyeglasses': 'You are wearing eyeglasses!',
+            'Brown_Hair': 'You have nice brown hair!',
+            'Black_Hair': 'You have nice black hair!',
+            'Gray_Hair': 'You must be a wise man, judging by your gray hair!',
+            'Wavy_Hair': 'You have nice wavy hair!',
+            'Straight_Hair': 'You have nice'
+            }
+
     if 'Smiling' in pred_attr:
         roboFace.happy()
-        say('I like it when people smile at me!')
-        return
-    if 'Male' in pred_attr and 'No_Beard' in pred_attr and len(pred_attr) == 2:
-        roboFace.unsure()
-        say('I am not pretty sure that my predictions are right.')
-        return
-    # if 'Male' not in pred_attr:
-    #     say('You are a female, am I right?')
-    #     return
-    if 'Male' not in pred_attr and 'Wearing_Earrings' in pred_attr:
-        say('You are wearing beatiful earrings today!')
-        return
-    if 'Male' not in pred_attr and 'Wearing_Lipstick' in pred_attr:
-        say('I see you are wearing lipstick today. Pretty!')
-        return
-    if 'Blond_Hair' in pred_attr:
-        say('Nice blond hair.')
-        return
+    elif 'Black_Hair' in pred_attr:
+        roboFace.angry(moveHead=False)
+    elif 'Eyeglasses' in pred_attr:
+        roboFace.unsure(moveHead=False)
+    else:
+        roboFace.neutral()
+    
+    index = np.random.randint(0, len(pred_attr))
+    say(talk[pred_attr[index]])
+
+def getProbaStream(probStream, probs):
+    if probStream == None:
+        probStream = probs
+    else:
+        probStream = np.vstack((probStream, probs))
+    return probStream
 
 if __name__ == "__main__":
-    roboFace = face.Face()
+    roboFace = face.Face(x_weight=0.8, y_weight=0.2)
     roboFace.neutral()
     # with h5py.File('trained/trained_webcam.h5',  "a") as f:
     #     try:
@@ -201,9 +229,12 @@ if __name__ == "__main__":
     else:
         rval = False
 
+    probStream = None
+    saidNothing = 0
+
     while rval:
         # cv2.imwrite('letiN/{}.jpg'.format(datetime.now().strftime('%Y-%m-%d_%H%M%S')), frame)
-        normalised_image, frame = detectFace(frame)      
+        normalised_image, frame = detectFace(frame)    
 
         # if a face is detected and the normalisation was successful, predict on it
         if normalised_image is not None:
@@ -215,18 +246,78 @@ if __name__ == "__main__":
             X_test -= meanFace
             classes = model.predict_classes(X_test, batch_size=32, verbose=0)
             proba = model.predict_proba(X_test, batch_size=32, verbose=0)
-            pred_attr = mapAttributes((proba > 0.4)[0])
-            print( proba)
-            print(pred_attr)
-            # end NN stuff
+            # pred_attr = mapAttributes((proba > 0.6)[0])
+            # print( proba)
+            # print(pred_attr)
 
-            # postprocessing and reaction step
-            # sayDoSomething(pred_attr)
+            # capture about ten predicted probabilities and take the average of them to make prediction more robust
+            probStream = getProbaStream(probStream, proba)
+            if saidNothing == 0 and probStream.shape[0] < 10:
+                saidNothing += 1
+                cv2.imshow("Webcam Preview", frame)
+                rval, frame = vc.read()
+                key = cv2.waitKey(20)
+                if key == 27: # exit on ESC
+                    break
+            elif probStream.shape[0] > 10 and len(probStream.shape) >= 2:
+                meanProbs = np.mean(probStream, axis=0)
+                pred_attr = mapAttributes(meanProbs > 0.6)
+                print(meanProbs)
 
+                best = []
+                if meanProbs[0] > meanProbs [1] and meanProbs[0] > meanProbs [4]:
+                    best.append('Black_Hair')
+                elif meanProbs[1] > meanProbs [0] and meanProbs[1] > meanProbs [4]:
+                    best.append('Blond_Hair')
+                elif meanProbs[4] > meanProbs [0] and meanProbs[4] > meanProbs [1]:
+                    best.append('Brown_Hair')
+                if meanProbs[9] < meanProbs[10]:
+                    best.append('Straight_Hair')
+                else:
+                    best.append('Wavy_Hair')
+                if meanProbs[3] > 0.6:
+                    best.append('Eyeglasses')
+                if meanProbs[8] > 0.5:
+                    best.append('Smiling')
+                if meanProbs[11] > 0.11:
+                    best.append('Wearing_Earrings')
+                if meanProbs[12] > 0.11:
+                    best.append('Wearing_Lipstick')
+                if meanProbs[12] > 0.11 and meanProbs[11] > 0.11 and meanProbs[5] < 0.6:
+                    best.append('Female')
+                elif meanProbs[12] < 0.11 and meanProbs[11] < 0.11 and meanProbs[5] > 0.6:
+                    best.append('Male')
+                print("BEST", best)
 
-        #roboFace.sad()
-        #roboFace.unsure()
-        #roboFace.angry()
+                # postprocessing and reaction step
+                sayDoSomething(best)
+                saidNothing = 0
+                while mixer.music.get_busy():
+                    _, frame = detectFace(frame)
+                    probStream = None
+                    cv2.imshow("Webcam Preview", frame)
+                    rval, frame = vc.read()
+                    key = cv2.waitKey(20)
+                    if key == 27: # exit on ESC
+                        break
+
+        # it may happen that no face is in the image, so add a reaction for feeling neglected
+        elif saidNothing > 100:
+            roboFace.sad()
+            say("Hey, why is no one looking at me? I feel neglected. I feel it. I feel it! I am afraid!")
+            mixer.init()
+            mixer.music.load('creepyMusic.mp3')
+            mixer.music.play()  
+            while mixer.music.get_busy():
+                _, frame = detectFace(frame)
+                probStream = None
+                cv2.imshow("Webcam Preview", frame)
+                rval, frame = vc.read()
+                key = cv2.waitKey(20)
+                if key == 27: # exit on ESC
+                    break
+        else:
+            saidNothing += 1
 
         cv2.imshow("Webcam Preview", frame)
         rval, frame = vc.read()
