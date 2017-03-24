@@ -26,6 +26,8 @@ import math
 import face
 from gtts import gTTS
 from pygame import mixer, time
+import psutil
+import subprocess
 
 IMAGE_SIZE = (128, 128)
 IOD = 40.0
@@ -222,7 +224,7 @@ if __name__ == "__main__":
     model = load_model('../face_detection/trained/pretrained_CelebA_normalised0203-05.h5')
 
     cv2.namedWindow("Webcam Preview")
-    vc = cv2.VideoCapture(1) # 0 for built-in webcam, 1 for robot
+    vc = cv2.VideoCapture(0) # 0 for built-in webcam, 1 for robot
 
     if vc.isOpened(): # try to get the first frame
         rval, frame = vc.read()
@@ -231,6 +233,7 @@ if __name__ == "__main__":
 
     probStream = None
     saidNothing = 0
+    doc = None
 
     while rval:
         # cv2.imwrite('letiN/{}.jpg'.format(datetime.now().strftime('%Y-%m-%d_%H%M%S')), frame)
@@ -260,6 +263,9 @@ if __name__ == "__main__":
                 if key == 27: # exit on ESC
                     break
             elif probStream.shape[0] > 10 and len(probStream.shape) >= 2:
+                psutil.Process(doc).get_children()[0].kill()
+                doc = None
+
                 meanProbs = np.mean(probStream, axis=0)
                 pred_attr = mapAttributes(meanProbs > 0.6)
                 print(meanProbs)
@@ -305,9 +311,6 @@ if __name__ == "__main__":
         elif saidNothing > 100:
             roboFace.sad()
             say("Hey, why is no one looking at me? I feel neglected. I feel it. I feel it! I am afraid!")
-            mixer.init()
-            mixer.music.load('creepyMusic.mp3')
-            mixer.music.play()  
             while mixer.music.get_busy():
                 _, frame = detectFace(frame)
                 probStream = None
@@ -316,6 +319,10 @@ if __name__ == "__main__":
                 key = cv2.waitKey(20)
                 if key == 27: # exit on ESC
                     break
+
+            if doc == None:
+                doc = subprocess.call(['rhythmbox', 'creepyMusic.mp3'])
+            saidNothing = 0
         else:
             saidNothing += 1
 
