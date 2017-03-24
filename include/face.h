@@ -272,8 +272,8 @@ public:
 private:
     int mapEye_servo(int x) const
     {
-        x = ((static_cast<float>(x) / x_len_) * 4000) + 4000;
-        return x;
+        x = ((static_cast<float>(x) / x_len_) * 3000) + 4000;
+        return roundTo50(x);
     }
 
     int mapX_servo1(int x) const
