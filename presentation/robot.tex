@@ -49,6 +49,11 @@
 \begin{document}
 \frame{\titlepage}
 
+\begin{frame}
+\frametitle{Structure}
+\tableofcontents
+\end{frame}
+
 \defverbatim[colored]\lstServoConfig{
     \begin{adjustbox}{max size={\textwidth}{\textheight}}
         \begin{lstlisting}[language=C++,basicstyle=\ttfamily,keywordstyle=\color{blue}]
@@ -112,7 +117,7 @@
 \begin{frame}{Uncanny Valley}
 	\begin{figure}
 		\centering
-        \includegraphics[width=\textwidth,height=\textheight-50,keepaspectratio]{figures/uncanny_valley.png}
+        \includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{figures/uncanny_valley.png}
 		\label{fig:uncanny_valley}
 	\end{figure}
 \end{frame}
@@ -249,6 +254,7 @@ Without data normalisation: beautiful training curve, BUT...
 The predicted classes on the real world images from the robot are: \\
 \centering
 Male (0.89), No beard (0.76) \\
+\centering
 \includegraphics[height=0.6\textheight]{figures/failMaleNoBeard} 
 \end{frame}
 
@@ -272,6 +278,7 @@ Male (0.89), No beard (0.76) \\
 \begin{frame}{Own Approach}{Final Accuracy per Class}
 \centering
 overall accuracy of 90\%
+\centering
 	\includegraphics[width=1.1\textwidth]{figures/accuracy_on_classes} 
 \end{frame}
 
@@ -280,6 +287,7 @@ overall accuracy of 90\%
 'Black Hair', 'Mouth Slightly Open', 'No Beard', 'Smiling', 'Wearing Earrings', 'Wearing Lipstick' \\
 \includegraphics[height=0.3\textheight]{figures/leti_normalised110} \\ 
 'Black Hair', 'Mouth Slightly Open', 'No Beard', 'Straight Hair', 'Wearing Lipstick' \\
+\centering
 \includegraphics[height=0.3\textheight]{figures/leti_normalised111} 
 \end{frame}
 
@@ -289,7 +297,17 @@ overall accuracy of 90\%
  \centering
 \includegraphics[height=0.3\textheight]{figures/leti_normalised24}\\
 'Black Hair', \textcolor{red}{'Male'}, 'Straight Hair' -- only 2 out of 45 examples. \\
+\centering
 \includegraphics[height=0.3\textheight]{figures/leti_normalised0}
+\end{frame}
+
+\begin{frame}{Future Potential}
+\begin{itemize}
+ \item hardware
+ \item speech recognition
+ \item data acquisition
+\end{itemize}
+
 \end{frame}
 
 

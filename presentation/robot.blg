@@ -1,58 +1,48 @@
-This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
+This is BibTeX, Version 0.99d (TeX Live 2013/Debian)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: robot.aux
 The style file: abbrvnat.bst
 Database file #1: mybib.bib.bib
-Warning--string name "december" is undefined
---line 5 of file mybib.bib.bib
 Warning--to sort, need author or key in website
-Name 1 in "Ziwei Liu, Ping Luo, Xiaogang Wang, and Xiaoou Tang" has a comma at the end for entry liu2015faceattributes
-while executing---line 1347 of file abbrvnat.bst
-Name 1 in "Ziwei Liu, Ping Luo, Xiaogang Wang, and Xiaoou Tang" has a comma at the end for entry liu2015faceattributes
-while executing---line 1347 of file abbrvnat.bst
-Name 1 in "Ziwei Liu, Ping Luo, Xiaogang Wang, and Xiaoou Tang" has a comma at the end for entry liu2015faceattributes
-while executing---line 1429 of file abbrvnat.bst
-Name 1 in "Ziwei Liu, Ping Luo, Xiaogang Wang, and Xiaoou Tang" has a comma at the end for entry liu2015faceattributes
-while executing---line 1429 of file abbrvnat.bst
-You've used 2 entries,
+You've used 1 entry,
             2773 wiz_defined-function locations,
-            601 strings with 4802 characters,
-and the built_in function-call counts, 667 in all, are:
-= -- 56
-> -- 21
-< -- 1
-+ -- 8
-- -- 6
-* -- 42
-:= -- 88
-add.period$ -- 5
-call.type$ -- 2
-change.case$ -- 8
-chr.to.int$ -- 2
-cite$ -- 6
-duplicate$ -- 38
-empty$ -- 76
-format.name$ -- 9
-if$ -- 147
+            596 strings with 4620 characters,
+and the built_in function-call counts, 274 in all, are:
+= -- 24
+> -- 0
+< -- 0
++ -- 1
+- -- 0
+* -- 18
+:= -- 30
+add.period$ -- 2
+call.type$ -- 1
+change.case$ -- 3
+chr.to.int$ -- 1
+cite$ -- 4
+duplicate$ -- 15
+empty$ -- 36
+format.name$ -- 0
+if$ -- 61
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 1
-newline$ -- 17
-num.names$ -- 4
-pop$ -- 27
+missing$ -- 0
+newline$ -- 12
+num.names$ -- 0
+pop$ -- 13
 preamble$ -- 1
-purify$ -- 6
+purify$ -- 2
 quote$ -- 0
-skip$ -- 31
+skip$ -- 15
 stack$ -- 0
-substring$ -- 5
-swap$ -- 3
+substring$ -- 3
+swap$ -- 1
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 22
+type$ -- 11
 warning$ -- 1
-while$ -- 3
+while$ -- 0
 width$ -- 0
-write$ -- 29
-(There were 4 error messages)
+write$ -- 17
+(There was 1 warning)
