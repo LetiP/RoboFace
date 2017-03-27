@@ -104,7 +104,35 @@
     \end{adjustbox}
 }
 
-\section{HumanFace}
+\defverbatim[colored]\lstFaceBackend{
+    \begin{adjustbox}{max size={\textwidth}{\textheight}}
+        \begin{lstlisting}[language=C++,basicstyle=\ttfamily,keywordstyle=\color{blue}]
+            class Face
+            {
+            public:
+                Face(
+                    int x_len = 640 , int y_len = 480,
+                    float x_weight = 0.5f, float y_weight = 0.5f,
+                    const std::string & dev = "/dev/ttyACM0"
+                );
+
+                template<size_t N>
+                void applyConfig(const ServoConfig<N> & config)
+
+                void happy(bool moveHead = true)
+                // more emotions
+
+                void moveHeadX(int x)
+                void moveHeadY(int y)
+                void moveHead(int x, int y)
+            private:
+                // ...
+            };
+        \end{lstlisting}
+    \end{adjustbox}
+}
+
+\section{Introduction}
 \begin{frame}{HumanFace}
 	\begin{figure}
 		\centering
@@ -113,7 +141,6 @@
 	\end{figure}
 \end{frame}
 
-\section{Uncanny Valley}
 \begin{frame}{Uncanny Valley}
 	\begin{figure}
 		\centering
@@ -132,8 +159,19 @@
 
 \section{Hardware}
 \begin{frame}{RoboFace}{Hardware}
-%\frametitle{Structure}
-%\tableofcontents
+	\begin{figure}
+		\centering
+        \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figures/RoboFaceNeutral.jpg}
+		\label{fig:RoboFaceNeutral}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{RoboFace}{Hardware}
+	\begin{figure}
+		\centering
+        \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{figures/RoboFaceBack.jpg}
+		\label{fig:RoboFaceBack}
+	\end{figure}
 \end{frame}
 
 \section{Software}
@@ -152,6 +190,10 @@
 
 \begin{frame}{RoboFace}{Software}
     \lstServoConstraints
+\end{frame}
+
+\begin{frame}{RoboFace}{Software}
+    \lstFaceBackend
 \end{frame}
 
 \section{Problem}
