@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/W32TeX) (preloaded format=pdflatex 2017.1.4)  27 MAR 2017 23:05
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/W32TeX) (preloaded format=pdflatex 2017.1.4)  27 MAR 2017 23:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1649,11 +1649,11 @@ Package atenddvi Info: Last page = 30.
 \tf@snm=\write8
 \openout8 = `robot.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 383.
-Package atveryend Info: Executing hook `AfterLastShipout' on input line 383.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 386.
+Package atveryend Info: Executing hook `AfterLastShipout' on input line 386.
  (./robot.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 383.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 383.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 386.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 386.
 Package rerunfilecheck Info: File `robot.out' has not changed.
 (rerunfilecheck)             Checksum: 9BEF20BB0F2654A42B2D04FD3C2E5A47;316.
 
@@ -1685,7 +1685,7 @@ dist/fonts/type1/public/cm-super/sfss1440.pfb><c:/texlive/2016/texmf-dist/fonts
 lic/cm-super/sfsx1095.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/cm-sup
 er/sfsx1440.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/cm-super/sftt090
 0.pfb><c:/texlive/2016/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb>
-Output written on robot.pdf (30 pages, 17617006 bytes).
+Output written on robot.pdf (30 pages, 17617796 bytes).
 PDF statistics:
  4551 PDF objects out of 5155 (max. 8388607)
  3321 compressed objects within 34 object streams
