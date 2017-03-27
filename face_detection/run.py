@@ -15,10 +15,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-
 import cv2
 import numpy as np
 from keras.models import load_model
+# from scipy import misc
 from scipy.misc import imresize
 from skimage.transform import resize, rotate
 import h5py
@@ -26,6 +26,7 @@ import math
 import face
 from gtts import gTTS
 from pygame import mixer, time
+import os, subprocess, signal, psutil
 
 IMAGE_SIZE = (128, 128)
 IOD = 40.0
@@ -132,7 +133,8 @@ def detectFace(image):
         roi_color = image[y:y+h, x:x+w]
 
         # normalise image in order to predict on it
-        # detect eyes for Inter Ocular Distance
+        # croppedImage = imgCrop(image, face, boxScale=1)
+        # detect eyes for Inter Oculat Distance
         eyes = eye_cascade.detectMultiScale(roi_gray)
         if len(eyes) == 2:
             left_eye = eyes[0][0:2] + x 
@@ -140,7 +142,7 @@ def detectFace(image):
             eyex = int((left_eye[0] + right_eye[0])*.5)
             eyey = int((left_eye[1] + right_eye[1])*.5)
             roboFace.moveHead(eyex, eyey)
-            return None, image
+            # suggestion: skip this frame as prediction, so return None, image
         for (ex,ey,ew,eh) in eyes:
             cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
             if len(eyes) == 2 and np.abs(eyes[0,1] - eyes[1,1]) < 10:
@@ -180,7 +182,7 @@ def sayDoSomething(pred_attr):
     talk = {'Smiling': 'I like it when people smile at me!',
             'Female': 'You are a female, am I right?',
             'Male': 'You are a male, am I right?',
-            'Wearing_Earrings': 'You are wearing beatiful earrings today!',
+            'Wearing_Earrings': 'You are wearing beautiful earrings today!',
             'Wearing_Lipstick': 'I see you are wearing lipstick today. Pretty!',
             'Blond_Hair': 'Nice blond hair!',
             'Eyeglasses': 'You are wearing eyeglasses!',
@@ -202,6 +204,7 @@ def sayDoSomething(pred_attr):
     
     index = np.random.randint(0, len(pred_attr))
     say(talk[pred_attr[index]])
+
 
 def getProbaStream(probStream, probs):
     if probStream == None:
@@ -231,10 +234,10 @@ if __name__ == "__main__":
 
     probStream = None
     saidNothing = 0
+    process = None
 
     while rval:
-        # cv2.imwrite('letiN/{}.jpg'.format(datetime.now().strftime('%Y-%m-%d_%H%M%S')), frame)
-        normalised_image, frame = detectFace(frame)    
+        normalised_image, frame = detectFace(frame)  
 
         # if a face is detected and the normalisation was successful, predict on it
         if normalised_image is not None:
@@ -250,7 +253,6 @@ if __name__ == "__main__":
             # print( proba)
             # print(pred_attr)
 
-            # capture about ten predicted probabilities and take the average of them to make prediction more robust
             probStream = getProbaStream(probStream, proba)
             if saidNothing == 0 and probStream.shape[0] < 10:
                 saidNothing += 1
@@ -258,8 +260,16 @@ if __name__ == "__main__":
                 rval, frame = vc.read()
                 key = cv2.waitKey(20)
                 if key == 27: # exit on ESC
+                    if process != None:
+                        os.kill(process.pid, signal.SIGTERM)
+                    say("I'm sorry Dave. I'm afraid I can't do that.")
+                    while mixer.music.get_busy():
+                        time.Clock().tick(10)
                     break
             elif probStream.shape[0] > 10 and len(probStream.shape) >= 2:
+                if process != None:
+                    os.kill(process.pid, signal.SIGTERM)
+                    process = None
                 meanProbs = np.mean(probStream, axis=0)
                 pred_attr = mapAttributes(meanProbs > 0.6)
                 print(meanProbs)
@@ -279,7 +289,7 @@ if __name__ == "__main__":
                     best.append('Eyeglasses')
                 if meanProbs[8] > 0.5:
                     best.append('Smiling')
-                if meanProbs[11] > 0.11:
+                if meanProbs[11] > 0.12:
                     best.append('Wearing_Earrings')
                 if meanProbs[12] > 0.11:
                     best.append('Wearing_Lipstick')
@@ -288,6 +298,8 @@ if __name__ == "__main__":
                 elif meanProbs[12] < 0.11 and meanProbs[11] < 0.11 and meanProbs[5] > 0.6:
                     best.append('Male')
                 print("BEST", best)
+
+                # end NN stuff
 
                 # postprocessing and reaction step
                 sayDoSomething(best)
@@ -299,15 +311,17 @@ if __name__ == "__main__":
                     rval, frame = vc.read()
                     key = cv2.waitKey(20)
                     if key == 27: # exit on ESC
+                        if process != None:
+                            os.kill(process.pid, signal.SIGTERM)
+                        say("I'm sorry Dave. I'm afraid I can't do that.")
+                        while mixer.music.get_busy():
+                            time.Clock().tick(10)
                         break
 
-        # it may happen that no face is in the image, so add a reaction for feeling neglected
-        elif saidNothing > 100:
+        elif saidNothing > 200:
+            saidNothing = 0
             roboFace.sad()
             say("Hey, why is no one looking at me? I feel neglected. I feel it. I feel it! I am afraid!")
-            mixer.init()
-            mixer.music.load('creepyMusic.mp3')
-            mixer.music.play()  
             while mixer.music.get_busy():
                 _, frame = detectFace(frame)
                 probStream = None
@@ -315,7 +329,15 @@ if __name__ == "__main__":
                 rval, frame = vc.read()
                 key = cv2.waitKey(20)
                 if key == 27: # exit on ESC
+                    if process != None:
+                        os.kill(process.pid, signal.SIGTERM)
+                    say("I'm sorry Dave. I'm afraid I can't do that.")
+                    while mixer.music.get_busy():
+                        time.Clock().tick(10)
                     break
+
+            if process == None:
+                process = subprocess.Popen(['rhythmbox', 'creepyMusic.mp3'])
         else:
             saidNothing += 1
 
@@ -323,6 +345,11 @@ if __name__ == "__main__":
         rval, frame = vc.read()
         key = cv2.waitKey(20)
         if key == 27: # exit on ESC
+            if process != None:
+                os.kill(process.pid, signal.SIGTERM)
+            say("I'm sorry Dave. I'm afraid I can't do that.")
+            while mixer.music.get_busy():
+                time.Clock().tick(10)
             break
     cv2.destroyWindow("Webcam Preview")
 
