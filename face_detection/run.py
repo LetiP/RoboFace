@@ -272,7 +272,6 @@ if __name__ == "__main__":
                     process = None
                 meanProbs = np.mean(probStream, axis=0)
                 pred_attr = mapAttributes(meanProbs > 0.6)
-                print(meanProbs)
 
                 best = []
                 if meanProbs[0] > meanProbs [1] and meanProbs[0] > meanProbs [4]:
@@ -287,7 +286,7 @@ if __name__ == "__main__":
                     best.append('Wavy_Hair')
                 if meanProbs[3] > 0.6:
                     best.append('Eyeglasses')
-                if meanProbs[8] > 0.5:
+                if meanProbs[8] > 0.6:
                     best.append('Smiling')
                 if meanProbs[11] > 0.12:
                     best.append('Wearing_Earrings')
@@ -297,6 +296,7 @@ if __name__ == "__main__":
                     best.append('Female')
                 elif meanProbs[12] < 0.11 and meanProbs[11] < 0.11 and meanProbs[5] > 0.6:
                     best.append('Male')
+                print(meanProbs)
                 print("BEST", best)
 
                 # end NN stuff
