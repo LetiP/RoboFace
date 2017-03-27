@@ -1,9 +1,8 @@
-\beamer@endinputifotherversion {3.24pt}
 \select@language {english}
 \beamer@sectionintoc {1}{Introduction}{3}{0}{1}
 \beamer@sectionintoc {2}{Hardware}{6}{0}{2}
 \beamer@sectionintoc {3}{Software}{8}{0}{3}
 \beamer@sectionintoc {4}{Problem}{12}{0}{4}
-\beamer@sectionintoc {5}{Dataset}{15}{0}{5}
-\beamer@sectionintoc {6}{Own Approach}{18}{0}{6}
-\beamer@sectionintoc {7}{References}{28}{0}{7}
+\beamer@sectionintoc {5}{Dataset}{16}{0}{5}
+\beamer@sectionintoc {6}{Own Approach}{19}{0}{6}
+\beamer@sectionintoc {7}{Outlook and Refs.}{29}{0}{7}
