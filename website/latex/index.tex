@@ -1,6 +1,7 @@
 \documentclass[12.5pt]{scrartcl}
 
 %\usepackage[romanian, english, ngerman]{babel}
+\usepackage{listings}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{amsmath}
@@ -52,17 +53,51 @@
 
 	\section{Setup guide for the robot}
 	\subsection{Hardware}
+    There are 2 servos used to move the head and 10 more to display facial expressions. The mini maestro 18-channel usb servo controller is used
+    to control them.
+
+    \begin{center}
+        \includegraphics[width=0.8\textwidth,height=0.2\textheight,keepaspectratio]{images/RoboFaceNeutral.jpg}
+        \label{fig:RoboFaceNeutral}
+    \end{center}
+
+	\begin{center}
+        \includegraphics[width=0.8\textwidth,height=0.2\textheight,keepaspectratio]{images/RoboFaceBack.jpg}
+		\label{fig:RoboFaceBack}
+	\end{center}
+
 	\subsection{Software}
-	The elaborated C++ code for controlling RoboFace has beautiful user frienly python binaries. The following code example speaks for himself: \\
+	A python interface is build on top of the C++ code controlling the robots hardware. Which may be used like this:
 	>>> import face \\
 	>>> f = face.Face()\\
-	>>> f.sad()\\
-	>>> f.happy()\\
-	>>> f.unsure()\\
-	>>> f.angry()\\
-	>>> f.neutral()\\
+    >>> f.happy() \# look happy (possibly moves the head)\\
+	>>> f.angry(moveHead=False) \# look angry but don't move the head\\
+    >>> f.moveHead(x, y) \# move the head and possibly the eyes to the position (x, y),\\
+    >>> \# where (x, y) are coordinates within the current webcam frame\\
+    Further facial expressions and head movement functions as well as optional configuration parameters
+    for the constructor are provided. Please call help(Face) from within your python interpreter for more information.
 
-	
+    In case you need a more specific control over each servo you must use the C++ api, which is a superset of the python api.
+    The major addition here, which is visible to the user, is the notion of a "ServoConfig" and the corresponding applyConfig() function.
+    For example:
+    \begin{lstlisting}[language=C++]
+    #include <face.h>
+
+    int main()
+    {
+        Face f = Face();
+        ServoConfig<3> config = {{1, 5, 10}, {4500, 8000, 6000}};
+        // set servo 1, 5, and 10 to the positions 4500, 8000 and 6000
+        f.applyConfig(config);
+    }
+    \end{lstlisting}
+
+    The code depends on the pololu-usb-sdk and RapaPololuMaestro library. Which are available on github.
+    \begin{itemize}
+    \item https://github.com/pololu/pololu-usb-sdk
+    \item https://github.com/jbitoniau/RapaPololuMaestr://github.com/jbitoniau/RapaPololuMaestro
+    \end{itemize}
+
 	For using the face attribute detection software, a standard python (2.7 or 3.5) anaconda installation should additionally include \textit{opencv, keras}. You can easily install them using conda with the following commands:
 	\begin{itemize}
 	\item conda install -c menpo opencv3=3.1.0
@@ -181,7 +216,9 @@
 	'Black Hair', \emph{'Male'}, 'Straight Hair'\\
 	\includegraphics[height=0.1\textheight]{images/leti_normalised0}
 	\section{Outlook}
-	Hardware improvements...
+	Improving the socket on which the head is placed as well as the way it moves would provide the biggest benefit for the hardware.
+    Software wise it is mostly an issue of getting enough labeled images to train the neural network. We already used hundreds of thousands of them tough.
+    Improving much without going into the millions is unlikely.
 	\section{Source code}
 	Can be found on	https://github.com/LetiP/RoboFace
 	
